@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements - Responsive Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2d5016;
+    }
+    
+    .test-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .breakpoint-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .breakpoint-list li {
+      padding: 8px;
+      margin: 4px 0;
+      background: #f4e8d1;
+      border-left: 4px solid #2d5016;
+      border-radius: 4px;
+    }
+    
+    .breakpoint-list li strong {
+      color: #2d5016;
+    }
+    
+    .iframe-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .iframe-container h2 {
+      margin-top: 0;
+      color: #2d5016;
+    }
+    
+    iframe {
+      width: 100%;
+      border: 2px solid #2d5016;
+      border-radius: 8px;
+      display: block;
+    }
+    
+    .instructions {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      color: #856404;
+    }
+    
+    .instructions ol {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    
+    .instructions li {
+      margin: 4px 0;
+    }
+
+    .test-checklist {
+      background: #d1ecf1;
+      border: 1px solid #0c5460;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .test-checklist h3 {
+      margin-top: 0;
+      color: #0c5460;
+    }
+    
+    .test-checklist ul {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    
+    .test-checklist li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Achievements View - Responsive Test</h1>
+    
+    <div class="test-info">
+      <h2>Test Requirements</h2>
+      <p>Verify the achievements mockup is responsive and badges render correctly at:</p>
+      <ul class="breakpoint-list">
+        <li><strong>320px (Mobile)</strong> - 2 columns, 80px badges, compact spacing</li>
+        <li><strong>768px (Tablet)</strong> - 3 columns, 100px badges, comfortable spacing</li>
+        <li><strong>1024px (Desktop)</strong> - 4 columns, 110px badges, generous spacing</li>
+        <li><strong>1920px (Large Desktop)</strong> - 5 columns, 120px badges, maximum spacing</li>
+      </ul>
+    </div>
+    
+    <div class="instructions">
+      <h3>How to Test:</h3>
+      <ol>
+        <li>Open browser DevTools (F12)</li>
+        <li>Enable responsive design mode (Ctrl+Shift+M / Cmd+Shift+M)</li>
+        <li>Test each breakpoint: 320px, 768px, 1024px, 1920px</li>
+        <li>Verify the following:
+          <ul>
+            <li>Achievement grid adjusts column count correctly</li>
+            <li>Badges scale appropriately and remain circular</li>
+            <li>Badge icons/emojis render clearly at all sizes</li>
+            <li>Progress bars display correctly</li>
+            <li>Milestone items are readable</li>
+            <li>No horizontal scrolling</li>
+            <li>Text remains readable at all sizes</li>
+            <li>Touch targets are ≥44px</li>
+          </ul>
+        </li>
+        <li>Test on actual mobile device if possible</li>
+      </ol>
+    </div>
+
+    <div class="test-checklist">
+      <h3>Badge Rendering Tests:</h3>
+      <ul>
+        <li>✅ Badges remain perfectly circular at all sizes</li>
+        <li>✅ Badge icons/emojis scale proportionally</li>
+        <li>✅ Unlocked badges show gold border and glow effect</li>
+        <li>✅ Locked badges show gray border and grayscale filter</li>
+        <li>✅ Badge borders are visible and consistent</li>
+        <li>✅ Badge shadows render correctly</li>
+        <li>✅ No pixelation or blur at any size</li>
+        <li>✅ Badges are centered in their cards</li>
+        <li>✅ Badge text (if any) remains readable</li>
+        <li>✅ Badge hover states work correctly</li>
+      </ul>
+    </div>
+    
+    <div class="iframe-container">
+      <h2>Current Viewport: <span id="viewport-size">Resizing...</span></h2>
+      <iframe id="achievements-iframe" src="achievements.html" height="1000"></iframe>
+    </div>
+    
+    <div class="test-info">
+      <h2>Expected Behavior at Each Breakpoint</h2>
+      <ul class="breakpoint-list">
+        <li><strong>320px:</strong> 2 columns, 80px badges, compact text, touch-friendly targets</li>
+        <li><strong>768px:</strong> 3 columns, 100px badges, comfortable reading size, 4-column stats</li>
+        <li><strong>1024px:</strong> 4 columns, 110px badges, generous spacing, optimal desktop experience</li>
+        <li><strong>1920px:</strong> 5 columns, 120px badges, maximum spacing, centered content with max-width</li>
+      </ul>
+    </div>
+
+    <div class="test-checklist">
+      <h3>Responsive Features to Verify:</h3>
+      <ul>
+        <li>✅ Grid columns adjust: 2 → 3 → 4 → 5</li>
+        <li>✅ Badge sizes scale: 80px → 100px → 110px → 120px</li>
+        <li>✅ Font sizes adjust appropriately</li>
+        <li>✅ Padding and spacing scale with viewport</li>
+        <li>✅ Progress stats grid: 2 columns → 4 columns</li>
+        <li>✅ Milestone items remain readable</li>
+        <li>✅ Category headers scale appropriately</li>
+        <li>✅ Overall progress bar remains visible</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // Update viewport size display
+    function updateViewportSize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      document.getElementById('viewport-size').textContent = `${width}px × ${height}px`;
+      
+      // Adjust iframe height based on viewport
+      const iframe = document.getElementById('achievements-iframe');
+      if (width < 768) {
+        iframe.height = '1200';
+      } else if (width < 1024) {
+        iframe.height = '1000';
+      } else {
+        iframe.height = '900';
+      }
+    }
+    
+    updateViewportSize();
+    window.addEventListener('resize', updateViewportSize);
+    
+    // Log breakpoint changes
+    let currentBreakpoint = '';
+    function checkBreakpoint() {
+      const width = window.innerWidth;
+      let breakpoint = '';
+      let badgeSize = '';
+      let columns = '';
+      
+      if (width >= 1920) {
+        breakpoint = '1920px+ (Large Desktop)';
+        badgeSize = '120px';
+        columns = '5';
+      } else if (width >= 1024) {
+        breakpoint = '1024px-1919px (Desktop)';
+        badgeSize = '110px';
+        columns = '4';
+      } else if (width >= 768) {
+        breakpoint = '768px-1023px (Tablet)';
+        badgeSize = '100px';
+        columns = '3';
+      } else {
+        breakpoint = '320px-767px (Mobile)';
+        badgeSize = '80px';
+        columns = '2';
+      }
+      
+      if (breakpoint !== currentBreakpoint) {
+        currentBreakpoint = breakpoint;
+        console.log(`Breakpoint: ${breakpoint} | Columns: ${columns} | Badge Size: ${badgeSize}`);
+      }
+    }
+    
+    checkBreakpoint();
+    window.addEventListener('resize', checkBreakpoint);
+  </script>
+</body>
+</html>
+

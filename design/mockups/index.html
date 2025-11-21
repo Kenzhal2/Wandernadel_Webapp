@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wandernadel Design Mockups - Overview</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <style>
+    body {
+      background: var(--color-parchment-light);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding: 32px;
+      background: var(--color-parchment);
+      border: 3px solid #8b5a2b;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-family: var(--font-family-serif);
+      font-size: 36px;
+      color: var(--color-text-primary);
+      margin: 0 0 12px 0;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    .mockups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .mockup-card {
+      background: var(--color-white);
+      border: 3px solid var(--color-parchment-dark);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .mockup-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-color: var(--color-forest-green);
+    }
+
+    .mockup-card:focus-visible {
+      outline: 3px solid var(--color-forest-green);
+      outline-offset: 2px;
+    }
+
+    .mockup-preview {
+      width: 100%;
+      height: 200px;
+      background: var(--color-parchment);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 2px solid var(--color-parchment-dark);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mockup-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      transform: scale(0.5);
+      transform-origin: top left;
+      width: 200%;
+      height: 200%;
+    }
+
+    .mockup-title {
+      font-family: var(--font-family-serif);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin: 0 0 8px 0;
+    }
+
+    .mockup-description {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin: 0 0 12px 0;
+      line-height: 1.6;
+    }
+
+    .mockup-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mockup-features li {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .mockup-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--color-forest-green);
+      font-weight: bold;
+    }
+
+    .test-links {
+      background: var(--color-parchment);
+      border: 2px solid var(--color-parchment-dark);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .test-links h2 {
+      font-family: var(--font-family-serif);
+      font-size: 22px;
+      color: var(--color-text-primary);
+      margin: 0 0 16px 0;
+    }
+
+    .test-links-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .test-link {
+      display: block;
+      padding: 12px 16px;
+      background: var(--color-white);
+      border: 2px solid var(--color-forest-green);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--color-forest-green);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .test-link:hover {
+      background: var(--color-forest-green);
+      color: var(--color-parchment-light);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .status-complete {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-test {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    @media (min-width: 768px) {
+      .mockups-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .mockups-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Sächsische Schweiz Wandernadel</h1>
+      <p>Design Mockups & Prototypes</p>
+    </div>
+
+    <div class="mockups-grid">
+      <a href="passport-view.html" class="mockup-card">
+        <div class="mockup-preview">🏔️</div>
+        <h3 class="mockup-title">Passport View</h3>
+        <p class="mockup-description">Digital passport showing collected stamps in a grid layout with progress tracking.</p>
+        <ul class="mockup-features">
+          <li>Stamp grid display</li>
+          <li>Progress bar</li>
+          <li>Bottom navigation</li>
+          <li>Responsive design</li>
+          <li>WCAG AA compliant</li>
+        </ul>
+        <span class="status-badge status-complete">Complete</span>
+      </a>
+
+      <a href="map-view.html" class="mockup-card">
+        <div class="mockup-preview">🗺️</div>
+        <h3 class="mockup-title">Map View</h3>
+        <p class="mockup-description">Interactive map with stamp locations, user position, and location detail cards.</p>
+        <ul class="mockup-features">
+          <li>Topographic map style</li>
+          <li>Interactive markers</li>
+          <li>Location detail card</li>
+          <li>Leather texture design</li>
+          <li>Keyboard accessible</li>
+        </ul>
+        <span class="status-badge status-complete">Complete</span>
+      </a>
+
+      <a href="stamp-collection.html" class="mockup-card">
+        <div class="mockup-preview">✉️</div>
+        <h3 class="mockup-title">Stamp Collection</h3>
+        <p class="mockup-description">Proximity detection and animated stamp collection flow with success screen.</p>
+        <ul class="mockup-features">
+          <li>Proximity banner</li>
+          <li>Collection animation</li>
+          <li>Success screen</li>
+          <li>60fps optimized</li>
+          <li>Smooth transitions</li>
+        </ul>
+        <span class="status-badge status-complete">Complete</span>
+      </a>
+
+      <a href="achievements.html" class="mockup-card">
+        <div class="mockup-preview">⭐</div>
+        <h3 class="mockup-title">Achievements</h3>
+        <p class="mockup-description">Achievement badges, milestones, and progress tracking dashboard.</p>
+        <ul class="mockup-features">
+          <li>Badge display</li>
+          <li>Milestone tracking</li>
+          <li>Progress overview</li>
+          <li>Category organization</li>
+          <li>Responsive grid</li>
+        </ul>
+        <span class="status-badge status-complete">Complete</span>
+      </a>
+
+      <a href="stamp-illustrations-test.html" class="mockup-card">
+        <div class="mockup-preview">🎨</div>
+        <h3 class="mockup-title">Stamp Illustrations</h3>
+        <p class="mockup-description">SVG stamp illustrations for key locations with scale testing.</p>
+        <ul class="mockup-features">
+          <li>5 location stamps</li>
+          <li>SVG format</li>
+          <li>Scalable design</li>
+          <li>No pixelation</li>
+          <li>Wanderpass aesthetic</li>
+        </ul>
+        <span class="status-badge status-complete">Complete</span>
+      </a>
+    </div>
+
+    <div class="test-links">
+      <h2>Test & Validation Pages</h2>
+      <div class="test-links-list">
+        <a href="responsive-test.html" class="test-link">Passport Responsive Test</a>
+        <a href="map-responsive-test.html" class="test-link">Map Responsive Test</a>
+        <a href="achievements-responsive-test.html" class="test-link">Achievements Responsive Test</a>
+        <a href="stamp-illustrations-test.html" class="test-link">Stamp Illustrations Test</a>
+      </div>
+    </div>
+
+    <div class="test-links">
+      <h2>Documentation</h2>
+      <div class="test-links-list">
+        <a href="accessibility-audit.md" class="test-link" target="_blank">Passport Accessibility Audit</a>
+        <a href="map-accessibility-audit.md" class="test-link" target="_blank">Map Accessibility Audit</a>
+        <a href="color-contrast-test.md" class="test-link" target="_blank">Color Contrast Test</a>
+        <a href="animation-performance-test.md" class="test-link" target="_blank">Animation Performance Test</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

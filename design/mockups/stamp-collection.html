@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stamp Collection - Sächsische Schweiz Wandernadel</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <style>
+    /* Collection flow specific styles */
+    .collection-container {
+      min-height: 100vh;
+      background: var(--color-parchment-light);
+      padding-bottom: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Proximity notification banner */
+    .proximity-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--color-forest-green) 0%, var(--color-forest-green-light) 100%);
+      color: var(--color-parchment-light);
+      padding: 16px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 200;
+      transform: translateY(-100%);
+      transition: transform 0.4s ease;
+      animation: slideDown 0.5s ease forwards;
+    }
+
+    .proximity-banner.show {
+      transform: translateY(0);
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .proximity-banner-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .proximity-icon {
+      font-size: 24px;
+      animation: pulse 2s infinite;
+      will-change: transform;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .proximity-text {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .proximity-distance {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-left: 8px;
+    }
+
+    /* Map view with proximity indicator */
+    .collection-map {
+      width: 100%;
+      height: 60vh;
+      background: linear-gradient(135deg, #e8d4b8 0%, #d4c4a8 50%, #c4b498 100%);
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px; /* Space for banner */
+    }
+
+    .user-location-large {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 4px solid var(--color-white);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.6);
+      z-index: 15;
+      animation: userPulse 2s infinite;
+      will-change: transform, opacity;
+    }
+
+    .user-location-large::before {
+      content: '▲';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #3b82f6;
+      font-size: 20px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes userPulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 0.9;
+      }
+    }
+
+    /* Proximity ring animation */
+    .proximity-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border: 3px solid var(--color-forest-green-light);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: ringPulse 2s infinite;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    @keyframes ringPulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Stamp location marker */
+    .stamp-location-marker {
+      position: absolute;
+      top: 45%;
+      right: 20%;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--color-achievement-gold);
+      border: 4px solid var(--color-white);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 20;
+      animation: markerGlow 2s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      will-change: box-shadow;
+    }
+
+    @keyframes markerGlow {
+      0%, 100% {
+        box-shadow: 0 4px 16px rgba(251, 191, 36, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 24px rgba(251, 191, 36, 0.8);
+      }
+    }
+
+    /* Collection card */
+    .collection-card {
+      background: var(--color-parchment);
+      border: 3px solid #8b5a2b;
+      border-radius: 12px;
+      margin: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .collection-card-title {
+      font-family: var(--font-family-serif);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin: 0 0 12px 0;
+    }
+
+    .collection-card-subtitle {
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .collection-stamp-preview {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      background: linear-gradient(180deg, #ffd89b 0%, #19547b 100%);
+      border: 6px solid var(--color-achievement-gold);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .collection-stamp-preview::before {
+      content: '🏔️';
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .collection-stamp-preview::after {
+      content: 'Bastei';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .collection-info {
+      display: flex;
+      justify-content: space-around;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .collection-info-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .collection-info-label {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .collection-info-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .collect-button {
+      width: 100%;
+      background: var(--color-forest-green);
+      color: var(--color-parchment-light);
+      border: none;
+      padding: 18px 24px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .collect-button:hover {
+      background: var(--color-forest-green-light);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .collect-button:active {
+      transform: translateY(0);
+    }
+
+    .collect-button:disabled {
+      background: var(--color-gray-400);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* Collection animation overlay */
+    .collection-animation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      will-change: opacity;
+      transform: translateZ(0); /* Force GPU acceleration */
+    }
+
+    .collection-animation-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .collection-animation-content {
+      text-align: center;
+      color: var(--color-white);
+    }
+
+    .collection-animation-stamp {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ffd89b 0%, #19547b 100%);
+      border: 8px solid var(--color-achievement-gold);
+      box-shadow: 0 12px 48px rgba(251, 191, 36, 0.6);
+      margin: 0 auto 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 120px;
+      position: relative;
+      overflow: hidden;
+      animation: stampCollect 1s ease;
+      will-change: transform, opacity;
+      transform: translateZ(0); /* Force GPU acceleration */
+    }
+
+    @keyframes stampCollect {
+      0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2) rotate(0deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .collection-animation-stamp::before {
+      content: '🏔️';
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: iconBounce 0.6s ease 0.3s;
+    }
+
+    @keyframes iconBounce {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(-20px);
+      }
+    }
+
+    .collection-animation-stamp::after {
+      content: 'Bastei';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .collection-animation-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      animation: fadeInUp 0.5s ease 0.3s both;
+    }
+
+    .collection-animation-subtitle {
+      font-size: 20px;
+      opacity: 0.9;
+      animation: fadeInUp 0.5s ease 0.5s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Success screen */
+    .success-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-parchment-light);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      will-change: opacity;
+      transform: translateZ(0); /* Force GPU acceleration */
+    }
+
+    .success-screen.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .success-stamp {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ffd89b 0%, #19547b 100%);
+      border: 6px solid var(--color-achievement-gold);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      position: relative;
+      overflow: hidden;
+      animation: successStamp 0.8s ease;
+      will-change: transform;
+      transform: translateZ(0); /* Force GPU acceleration */
+    }
+
+    @keyframes successStamp {
+      0% {
+        transform: scale(0) rotate(-360deg);
+      }
+      60% {
+        transform: scale(1.1) rotate(10deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .success-stamp::before {
+      content: '🏔️';
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .success-stamp::after {
+      content: 'Bastei';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .success-title {
+      font-family: var(--font-family-serif);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: 12px;
+      animation: fadeInUp 0.5s ease 0.3s both;
+    }
+
+    .success-message {
+      font-size: 18px;
+      color: var(--color-text-secondary);
+      margin-bottom: 32px;
+      text-align: center;
+      animation: fadeInUp 0.5s ease 0.5s both;
+    }
+
+    .success-stats {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.5s ease 0.7s both;
+    }
+
+    .success-stat {
+      text-align: center;
+    }
+
+    .success-stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-forest-green);
+      display: block;
+    }
+
+    .success-stat-label {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .success-button {
+      background: var(--color-forest-green);
+      color: var(--color-parchment-light);
+      border: none;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: fadeInUp 0.5s ease 0.9s both;
+    }
+
+    .success-button:hover {
+      background: var(--color-forest-green-light);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .collection-card {
+        max-width: 500px;
+        margin: 40px auto;
+      }
+
+      .collection-stamp-preview {
+        width: 240px;
+        height: 240px;
+      }
+
+      .collection-animation-stamp {
+        width: 400px;
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body class="parchment-bg">
+  <div class="collection-container">
+    <!-- Skip link -->
+    <a href="#main-content" class="sr-only skip-link">Skip to main content</a>
+
+    <!-- Proximity Banner -->
+    <div class="proximity-banner" id="proximity-banner" role="alert" aria-live="polite">
+      <div class="proximity-banner-content">
+        <span class="proximity-icon">📍</span>
+        <span class="proximity-text">Stamp location nearby!</span>
+        <span class="proximity-distance" id="proximity-distance">50m away</span>
+      </div>
+    </div>
+
+    <!-- Map View -->
+    <div class="collection-map" id="collection-map" role="img" aria-label="Map showing your location and nearby stamp">
+      <div class="proximity-ring"></div>
+      <div class="user-location-large" aria-label="Your current location"></div>
+      <div class="stamp-location-marker" id="stamp-marker" role="button" tabindex="0" aria-label="Bastei stamp location - Press Enter to view details">
+        <span class="sr-only">Bastei</span>
+      </div>
+    </div>
+
+    <!-- Collection Card -->
+    <main id="main-content" class="collection-card" role="main">
+      <h1 class="collection-card-title">Basteibrücke</h1>
+      <p class="collection-card-subtitle">You're within range to collect this stamp!</p>
+
+      <div class="collection-stamp-preview" id="stamp-preview" aria-label="Bastei stamp preview">
+        <span class="sr-only">Bastei stamp illustration</span>
+      </div>
+
+      <div class="collection-info">
+        <div class="collection-info-item">
+          <span class="collection-info-label">Distance</span>
+          <span class="collection-info-value" id="info-distance">50 m</span>
+        </div>
+        <div class="collection-info-item">
+          <span class="collection-info-label">Difficulty</span>
+          <span class="collection-info-value">Easy</span>
+        </div>
+        <div class="collection-info-item">
+          <span class="collection-info-label">Status</span>
+          <span class="collection-info-value" id="info-status">Available</span>
+        </div>
+      </div>
+
+      <button 
+        class="collect-button" 
+        id="collect-button"
+        aria-label="Collect Bastei stamp"
+        type="button">
+        <span>✉️</span>
+        <span>COLLECT STAMP</span>
+      </button>
+    </main>
+
+    <!-- Collection Animation Overlay -->
+    <div class="collection-animation-overlay" id="animation-overlay" role="dialog" aria-labelledby="animation-title" aria-modal="true">
+      <div class="collection-animation-content">
+        <div class="collection-animation-stamp" aria-label="Bastei stamp collected"></div>
+        <h2 class="collection-animation-title" id="animation-title">Stamp Collected!</h2>
+        <p class="collection-animation-subtitle">Basteibrücke has been added to your passport</p>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="success-screen" role="dialog" aria-labelledby="success-title" aria-modal="true">
+      <div class="success-stamp" aria-label="Bastei stamp"></div>
+      <h2 class="success-title" id="success-title">Congratulations!</h2>
+      <p class="success-message">You've successfully collected the Basteibrücke stamp</p>
+      
+      <div class="success-stats">
+        <div class="success-stat">
+          <span class="success-stat-value" id="total-stamps">4</span>
+          <span class="success-stat-label">Total Stamps</span>
+        </div>
+        <div class="success-stat">
+          <span class="success-stat-value" id="progress-percent">27%</span>
+          <span class="success-stat-label">Progress</span>
+        </div>
+      </div>
+
+      <button class="success-button" id="continue-button" type="button" aria-label="Continue to passport">
+        View Passport
+      </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <a href="map-view.html" class="nav-item active" aria-label="Map view" aria-current="page">
+        <span class="nav-item-icon">🗺️</span>
+        <span class="nav-item-label">Map</span>
+      </a>
+      <a href="passport-view.html" class="nav-item" aria-label="Passport view">
+        <span class="nav-item-icon">🏔️</span>
+        <span class="nav-item-label">Passport</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Routes">
+        <span class="nav-item-icon">🛤️</span>
+        <span class="nav-item-label">Routes</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Profile">
+        <span class="nav-item-icon">👤</span>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    // Proximity simulation
+    let distance = 50;
+    const proximityBanner = document.getElementById('proximity-banner');
+    const proximityDistance = document.getElementById('proximity-distance');
+    const infoDistance = document.getElementById('info-distance');
+
+    // Simulate approaching the location
+    function updateProximity() {
+      if (distance > 0) {
+        distance -= 1;
+        proximityDistance.textContent = `${distance}m away`;
+        infoDistance.textContent = `${distance} m`;
+        
+        if (distance <= 0) {
+          proximityDistance.textContent = 'You are here!';
+          infoDistance.textContent = '0 m';
+          document.getElementById('info-status').textContent = 'Ready to collect';
+        }
+      }
+    }
+
+    // Show proximity banner after 1 second
+    setTimeout(() => {
+      proximityBanner.classList.add('show');
+      setInterval(updateProximity, 500);
+    }, 1000);
+
+    // Collection button handler
+    const collectButton = document.getElementById('collect-button');
+    const animationOverlay = document.getElementById('animation-overlay');
+    const successScreen = document.getElementById('success-screen');
+
+    collectButton.addEventListener('click', function() {
+      if (distance > 0) {
+        alert('You need to be closer to collect this stamp!');
+        return;
+      }
+
+      // Disable button
+      this.disabled = true;
+      this.textContent = 'COLLECTING...';
+
+      // Show collection animation after short delay
+      setTimeout(() => {
+        animationOverlay.classList.add('show');
+        
+        // Hide animation and show success screen after 2 seconds
+        setTimeout(() => {
+          animationOverlay.classList.remove('show');
+          successScreen.classList.add('show');
+        }, 2000);
+      }, 300);
+    });
+
+    // Keyboard navigation
+    collectButton.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+
+    document.getElementById('stamp-marker').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // Continue button
+    document.getElementById('continue-button').addEventListener('click', function() {
+      window.location.href = 'passport-view.html';
+    });
+
+    // Simulate distance updates (for demo)
+    // In real app, this would come from GPS geolocation
+  </script>
+</body>
+</html>
+

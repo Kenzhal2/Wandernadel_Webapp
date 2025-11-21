@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wander Passport - Sächsische Schweiz Wandernadel</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <style>
+    /* Additional styles specific to passport view */
+    .passport-content {
+      padding: 24px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: 
+        /* Parchment texture */
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 90, 43, 0.02) 2px,
+          rgba(139, 90, 43, 0.02) 4px
+        );
+    }
+
+    .stamp-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: linear-gradient(135deg, #f4e8d1 0%, #e8d4b8 100%);
+    }
+
+    .stamp-label {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      text-align: center;
+      width: 100%;
+    }
+    
+    @media (min-width: 320px) {
+      .stamp-label {
+        font-size: 11px;
+        margin-top: 6px;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .stamp-label {
+        font-size: 13px;
+        margin-top: 10px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .stamp-label {
+        font-size: 14px;
+        margin-top: 12px;
+      }
+    }
+    
+    @media (min-width: 1920px) {
+      .stamp-label {
+        font-size: 15px;
+        margin-top: 14px;
+      }
+    }
+
+    .stamp-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Sample stamp illustrations using CSS */
+    .stamp-bastei {
+      background: linear-gradient(180deg, #ffd89b 0%, #19547b 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stamp-bastei::before {
+      content: '🏔️';
+      font-size: 48px;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .stamp-bastei::after {
+      content: 'Bastei';
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .stamp-lilienstein {
+      background: linear-gradient(180deg, #87ceeb 0%, #4682b4 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stamp-lilienstein::before {
+      content: '⛰️';
+      font-size: 48px;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .stamp-lilienstein::after {
+      content: 'Lilienstein';
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .stamp-elbe {
+      background: linear-gradient(180deg, #a8e6cf 0%, #3fc1c9 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stamp-elbe::before {
+      content: '🚢';
+      font-size: 48px;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .stamp-elbe::after {
+      content: 'Elbe';
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body class="parchment-bg">
+  <div class="page-container">
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="sr-only skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="page-header" role="banner">
+      <h1>My Wander Passport</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="passport-content" role="main">
+      <!-- Progress Bar Section -->
+      <section class="progress-container" aria-label="Collection progress">
+        <div class="progress-level">
+          <div class="progress-level-icon" aria-hidden="true">🥾</div>
+          <div class="progress-level-label">Level 1: Hiker</div>
+        </div>
+        
+        <div class="progress-bar-wrapper" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" aria-label="Progress from Level 1 to Level 2: 65 percent">
+          <div class="progress-bar-fill" style="width: 65%;"></div>
+        </div>
+        
+        <div class="progress-level">
+          <div class="progress-level-icon" aria-hidden="true">🧭</div>
+          <div class="progress-level-label">Level 2: Explorer</div>
+        </div>
+      </section>
+
+      <!-- Stamp Grid -->
+      <section class="stamp-grid" aria-label="Stamp collection grid">
+        <!-- Collected Stamps -->
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-collected stamp-bastei" role="button" tabindex="0" aria-label="Bastei stamp - collected">
+            <span class="sr-only">Bastei - Collected</span>
+          </div>
+          <div class="stamp-label">Bastei</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Schrammsteine stamp - not collected">
+            <span class="sr-only">Schrammsteine - Not collected</span>
+          </div>
+          <div class="stamp-label">Schrammsteine</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Königstein stamp - not collected">
+            <span class="sr-only">Königstein - Not collected</span>
+          </div>
+          <div class="stamp-label">Königstein</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-collected stamp-lilienstein" role="button" tabindex="0" aria-label="Lilienstein stamp - collected">
+            <span class="sr-only">Lilienstein - Collected</span>
+          </div>
+          <div class="stamp-label">Lilienstein</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Pfaffenstein stamp - not collected">
+            <span class="sr-only">Pfaffenstein - Not collected</span>
+          </div>
+          <div class="stamp-label">Pfaffenstein</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-collected stamp-collected-silver stamp-elbe" role="button" tabindex="0" aria-label="Elbe stamp - collected">
+            <span class="sr-only">Elbe - Collected</span>
+          </div>
+          <div class="stamp-label">Elbe</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Rathen stamp - not collected">
+            <span class="sr-only">Rathen - Not collected</span>
+          </div>
+          <div class="stamp-label">Rathen</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Hohnstein stamp - not collected">
+            <span class="sr-only">Hohnstein - Not collected</span>
+          </div>
+          <div class="stamp-label">Hohnstein</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Bad Schandau stamp - not collected">
+            <span class="sr-only">Bad Schandau - Not collected</span>
+          </div>
+          <div class="stamp-label">Bad Schandau</div>
+        </div>
+
+        <div class="stamp-wrapper">
+          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Wehlen stamp - not collected">
+            <span class="sr-only">Wehlen - Not collected</span>
+          </div>
+          <div class="stamp-label">Wehlen</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <a href="map-view.html" class="nav-item" aria-label="Map view">
+        <span class="nav-item-icon">🗺️</span>
+        <span class="nav-item-label">Map</span>
+      </a>
+      <a href="passport-view.html" class="nav-item active" aria-label="Passport view" aria-current="page">
+        <span class="nav-item-icon">🏔️</span>
+        <span class="nav-item-label">Passport</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Routes">
+        <span class="nav-item-icon">🛤️</span>
+        <span class="nav-item-label">Routes</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Profile">
+        <span class="nav-item-icon">👤</span>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    // Simple interactivity for demonstration
+    document.querySelectorAll('.stamp').forEach(stamp => {
+      stamp.addEventListener('click', function() {
+        if (this.classList.contains('stamp-uncollected')) {
+          alert('This stamp is not yet collected. Visit the location to collect it!');
+        } else {
+          alert('Stamp details: ' + this.closest('.stamp-wrapper').querySelector('.stamp-label').textContent);
+        }
+      });
+
+      // Keyboard navigation
+      stamp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

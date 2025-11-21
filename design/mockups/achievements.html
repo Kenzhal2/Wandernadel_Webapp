@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements - Sächsische Schweiz Wandernadel</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <style>
+    /* Achievements specific styles */
+    .achievements-container {
+      min-height: 100vh;
+      background: var(--color-parchment-light);
+      padding-bottom: 80px;
+    }
+
+    .achievements-header {
+      background: var(--color-forest-green);
+      color: var(--color-parchment-light);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .achievements-header h1 {
+      font-family: var(--font-family-serif);
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: var(--color-parchment-light);
+    }
+
+    .achievements-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .achievements-content {
+      padding: 24px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Progress overview section */
+    .progress-overview {
+      background: var(--color-parchment);
+      border: 2px solid var(--color-parchment-dark);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-overview-title {
+      font-family: var(--font-family-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin: 0 0 16px 0;
+    }
+
+    .progress-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .progress-stat {
+      text-align: center;
+    }
+
+    .progress-stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-forest-green);
+      display: block;
+      line-height: 1.2;
+    }
+
+    .progress-stat-label {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .overall-progress {
+      margin-top: 20px;
+    }
+
+    .overall-progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .overall-progress-bar {
+      height: 24px;
+      background: var(--color-parchment-dark);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .overall-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-ochre) 0%, var(--color-ochre-dark) 100%);
+      border-radius: 12px;
+      transition: width 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Achievement categories */
+    .achievement-category {
+      margin-bottom: 40px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .category-icon {
+      font-size: 32px;
+    }
+
+    .category-title {
+      font-family: var(--font-family-serif);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+
+    /* Achievement grid */
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 20px;
+    }
+
+    /* Achievement card */
+    .achievement-card {
+      background: var(--color-white);
+      border: 3px solid var(--color-parchment-dark);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .achievement-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      border-color: var(--color-forest-green);
+    }
+
+    .achievement-card:focus-visible {
+      outline: 3px solid var(--color-forest-green);
+      outline-offset: 2px;
+    }
+
+    .achievement-card.unlocked {
+      border-color: var(--color-achievement-gold);
+      background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+    }
+
+    .achievement-card.locked {
+      opacity: 0.6;
+      filter: grayscale(0.8);
+    }
+
+    .achievement-badge {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .achievement-badge.unlocked {
+      border: 4px solid var(--color-achievement-gold);
+      animation: badgeGlow 2s infinite;
+    }
+
+    .achievement-badge.locked {
+      border: 4px solid var(--color-gray-400);
+      background: var(--color-gray-200);
+    }
+
+    @keyframes badgeGlow {
+      0%, 100% {
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 20px rgba(251, 191, 36, 0.7);
+      }
+    }
+
+    .achievement-badge.silver {
+      border-color: var(--color-achievement-silver);
+    }
+
+    .achievement-badge.bronze {
+      border-color: var(--color-achievement-bronze);
+    }
+
+    .achievement-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+    }
+
+    .achievement-description {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+      min-height: 32px;
+    }
+
+    .achievement-progress {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 8px;
+    }
+
+    .achievement-progress-bar {
+      height: 4px;
+      background: var(--color-gray-200);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .achievement-progress-fill {
+      height: 100%;
+      background: var(--color-forest-green-light);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* Milestone section */
+    .milestones-section {
+      background: var(--color-parchment);
+      border: 2px solid var(--color-parchment-dark);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .milestones-title {
+      font-family: var(--font-family-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin: 0 0 20px 0;
+    }
+
+    .milestone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .milestone-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      background: var(--color-white);
+      border-radius: 8px;
+      border: 2px solid var(--color-parchment-dark);
+      transition: all 0.2s ease;
+    }
+
+    .milestone-item.completed {
+      border-color: var(--color-achievement-gold);
+      background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+    }
+
+    .milestone-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .milestone-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .milestone-icon.completed {
+      background: var(--color-achievement-gold);
+      border: 3px solid var(--color-white);
+      box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+    }
+
+    .milestone-icon.pending {
+      background: var(--color-gray-200);
+      border: 3px solid var(--color-gray-400);
+    }
+
+    .milestone-content {
+      flex: 1;
+    }
+
+    .milestone-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+    }
+
+    .milestone-description {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+
+    .milestone-status {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-forest-green);
+    }
+
+    .milestone-status.completed {
+      color: var(--color-achievement-gold);
+    }
+
+    /* Responsive - Mobile: 320px */
+    @media (min-width: 320px) {
+      .achievements-content {
+        padding: 20px 16px;
+      }
+
+      .achievements-header h1 {
+        font-size: 24px;
+      }
+
+      .achievements-subtitle {
+        font-size: 13px;
+      }
+
+      .progress-overview {
+        padding: 16px;
+      }
+
+      .progress-overview-title {
+        font-size: 20px;
+      }
+
+      .progress-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .progress-stat-value {
+        font-size: 28px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .achievement-badge {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+      }
+
+      .achievement-name {
+        font-size: 13px;
+      }
+
+      .achievement-description {
+        font-size: 11px;
+        min-height: 28px;
+      }
+
+      .category-title {
+        font-size: 20px;
+      }
+
+      .category-icon {
+        font-size: 28px;
+      }
+
+      .milestones-section {
+        padding: 20px 16px;
+      }
+
+      .milestones-title {
+        font-size: 20px;
+      }
+
+      .milestone-item {
+        padding: 10px;
+        gap: 12px;
+      }
+
+      .milestone-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .milestone-name {
+        font-size: 14px;
+      }
+
+      .milestone-description {
+        font-size: 12px;
+      }
+    }
+
+    /* Responsive - Tablet: 768px */
+    @media (min-width: 768px) {
+      .achievements-content {
+        padding: 32px 24px;
+      }
+
+      .achievements-header h1 {
+        font-size: 28px;
+      }
+
+      .achievements-subtitle {
+        font-size: 14px;
+      }
+
+      .progress-overview {
+        padding: 24px;
+      }
+
+      .progress-overview-title {
+        font-size: 22px;
+      }
+
+      .progress-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+
+      .progress-stat-value {
+        font-size: 32px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .achievement-badge {
+        width: 100px;
+        height: 100px;
+        font-size: 48px;
+      }
+
+      .achievement-name {
+        font-size: 14px;
+      }
+
+      .achievement-description {
+        font-size: 12px;
+        min-height: 32px;
+      }
+
+      .category-title {
+        font-size: 24px;
+      }
+
+      .category-icon {
+        font-size: 32px;
+      }
+
+      .milestones-section {
+        padding: 24px;
+      }
+
+      .milestones-title {
+        font-size: 22px;
+      }
+
+      .milestone-item {
+        padding: 12px;
+        gap: 16px;
+      }
+
+      .milestone-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+      }
+    }
+
+    /* Responsive - Desktop: 1024px */
+    @media (min-width: 1024px) {
+      .achievements-content {
+        padding: 40px 32px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+      }
+
+      .achievement-badge {
+        width: 110px;
+        height: 110px;
+        font-size: 52px;
+      }
+
+      .achievement-card {
+        padding: 20px;
+      }
+
+      .milestone-item {
+        padding: 16px;
+      }
+    }
+
+    /* Responsive - Large Desktop: 1920px */
+    @media (min-width: 1920px) {
+      .achievements-content {
+        padding: 48px 40px;
+        max-width: 1600px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 32px;
+      }
+
+      .achievement-badge {
+        width: 120px;
+        height: 120px;
+        font-size: 56px;
+      }
+
+      .achievement-card {
+        padding: 24px;
+      }
+
+      .progress-overview {
+        padding: 32px;
+      }
+
+      .milestones-section {
+        padding: 32px;
+      }
+    }
+  </style>
+</head>
+<body class="parchment-bg">
+  <div class="achievements-container">
+    <!-- Skip link -->
+    <a href="#main-content" class="sr-only skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="achievements-header" role="banner">
+      <h1>Achievements</h1>
+      <p class="achievements-subtitle">Track your hiking milestones and unlock badges</p>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="achievements-content" role="main">
+      <!-- Progress Overview -->
+      <section class="progress-overview" aria-label="Overall progress">
+        <h2 class="progress-overview-title">Your Progress</h2>
+        
+        <div class="progress-stats">
+          <div class="progress-stat">
+            <span class="progress-stat-value">4</span>
+            <span class="progress-stat-label">Stamps Collected</span>
+          </div>
+          <div class="progress-stat">
+            <span class="progress-stat-value">8</span>
+            <span class="progress-stat-label">Achievements</span>
+          </div>
+          <div class="progress-stat">
+            <span class="progress-stat-value">27%</span>
+            <span class="progress-stat-label">Complete</span>
+          </div>
+          <div class="progress-stat">
+            <span class="progress-stat-value">Level 1</span>
+            <span class="progress-stat-label">Hiker</span>
+          </div>
+        </div>
+
+        <div class="overall-progress">
+          <div class="overall-progress-label">
+            <span>Overall Progress</span>
+            <span>27%</span>
+          </div>
+          <div class="overall-progress-bar" role="progressbar" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100" aria-label="Overall progress: 27 percent">
+            <div class="overall-progress-fill" style="width: 27%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Milestones Section -->
+      <section class="milestones-section" aria-label="Hiking milestones">
+        <h2 class="milestones-title">Milestones</h2>
+        
+        <div class="milestone-list">
+          <div class="milestone-item completed" role="button" tabindex="0" aria-label="First Stamp milestone - Completed">
+            <div class="milestone-icon completed">✓</div>
+            <div class="milestone-content">
+              <div class="milestone-name">First Stamp</div>
+              <div class="milestone-description">Collect your first hiking stamp</div>
+            </div>
+            <div class="milestone-status completed">Completed</div>
+          </div>
+
+          <div class="milestone-item completed" role="button" tabindex="0" aria-label="Explorer milestone - Completed">
+            <div class="milestone-icon completed">🏔️</div>
+            <div class="milestone-content">
+              <div class="milestone-name">Explorer</div>
+              <div class="milestone-description">Collect 3 stamps</div>
+            </div>
+            <div class="milestone-status completed">Completed</div>
+          </div>
+
+          <div class="milestone-item" role="button" tabindex="0" aria-label="Adventurer milestone - In progress">
+            <div class="milestone-icon pending">⛰️</div>
+            <div class="milestone-content">
+              <div class="milestone-name">Adventurer</div>
+              <div class="milestone-description">Collect 5 stamps</div>
+            </div>
+            <div class="milestone-status">1 more</div>
+          </div>
+
+          <div class="milestone-item" role="button" tabindex="0" aria-label="Master Hiker milestone - Not started">
+            <div class="milestone-icon pending">🥾</div>
+            <div class="milestone-content">
+              <div class="milestone-name">Master Hiker</div>
+              <div class="milestone-description">Collect 10 stamps</div>
+            </div>
+            <div class="milestone-status">6 more</div>
+          </div>
+
+          <div class="milestone-item" role="button" tabindex="0" aria-label="Legend milestone - Not started">
+            <div class="milestone-icon pending">⭐</div>
+            <div class="milestone-content">
+              <div class="milestone-name">Legend</div>
+              <div class="milestone-description">Collect all 15 stamps</div>
+            </div>
+            <div class="milestone-status">11 more</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Collection Achievements -->
+      <section class="achievement-category" aria-label="Collection achievements">
+        <div class="category-header">
+          <span class="category-icon">📚</span>
+          <h2 class="category-title">Collection</h2>
+        </div>
+        
+        <div class="achievement-grid">
+          <div class="achievement-card unlocked" role="button" tabindex="0" aria-label="First Steps achievement - Unlocked">
+            <div class="achievement-badge unlocked">👣</div>
+            <div class="achievement-name">First Steps</div>
+            <div class="achievement-description">Collect your first stamp</div>
+          </div>
+
+          <div class="achievement-card unlocked" role="button" tabindex="0" aria-label="Explorer achievement - Unlocked">
+            <div class="achievement-badge unlocked">🗺️</div>
+            <div class="achievement-name">Explorer</div>
+            <div class="achievement-description">Collect 3 stamps</div>
+          </div>
+
+          <div class="achievement-card" role="button" tabindex="0" aria-label="Adventurer achievement - Locked">
+            <div class="achievement-badge locked">🔒</div>
+            <div class="achievement-name">Adventurer</div>
+            <div class="achievement-description">Collect 5 stamps</div>
+            <div class="achievement-progress">
+              <div class="achievement-progress-bar">
+                <div class="achievement-progress-fill" style="width: 80%;"></div>
+              </div>
+              <span>4/5 stamps</span>
+            </div>
+          </div>
+
+          <div class="achievement-card" role="button" tabindex="0" aria-label="Master Hiker achievement - Locked">
+            <div class="achievement-badge locked">🔒</div>
+            <div class="achievement-name">Master Hiker</div>
+            <div class="achievement-description">Collect 10 stamps</div>
+            <div class="achievement-progress">
+              <div class="achievement-progress-bar">
+                <div class="achievement-progress-fill" style="width: 40%;"></div>
+              </div>
+              <span>4/10 stamps</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Distance Achievements -->
+      <section class="achievement-category" aria-label="Distance achievements">
+        <div class="category-header">
+          <span class="category-icon">🚶</span>
+          <h2 class="category-title">Distance</h2>
+        </div>
+        
+        <div class="achievement-grid">
+          <div class="achievement-card unlocked" role="button" tabindex="0" aria-label="Wanderer achievement - Unlocked">
+            <div class="achievement-badge unlocked bronze">🥉</div>
+            <div class="achievement-name">Wanderer</div>
+            <div class="achievement-description">Walk 5 km total</div>
+          </div>
+
+          <div class="achievement-card unlocked" role="button" tabindex="0" aria-label="Hiker achievement - Unlocked">
+            <div class="achievement-badge unlocked silver">🥈</div>
+            <div class="achievement-name">Hiker</div>
+            <div class="achievement-description">Walk 10 km total</div>
+          </div>
+
+          <div class="achievement-card" role="button" tabindex="0" aria-label="Mountain Climber achievement - Locked">
+            <div class="achievement-badge locked">🔒</div>
+            <div class="achievement-name">Mountain Climber</div>
+            <div class="achievement-description">Walk 25 km total</div>
+            <div class="achievement-progress">
+              <div class="achievement-progress-bar">
+                <div class="achievement-progress-fill" style="width: 60%;"></div>
+              </div>
+              <span>15/25 km</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Special Achievements -->
+      <section class="achievement-category" aria-label="Special achievements">
+        <div class="category-header">
+          <span class="category-icon">⭐</span>
+          <h2 class="category-title">Special</h2>
+        </div>
+        
+        <div class="achievement-grid">
+          <div class="achievement-card unlocked" role="button" tabindex="0" aria-label="Early Bird achievement - Unlocked">
+            <div class="achievement-badge unlocked">🌅</div>
+            <div class="achievement-name">Early Bird</div>
+            <div class="achievement-description">Collect a stamp before 8 AM</div>
+          </div>
+
+          <div class="achievement-card" role="button" tabindex="0" aria-label="Night Owl achievement - Locked">
+            <div class="achievement-badge locked">🔒</div>
+            <div class="achievement-name">Night Owl</div>
+            <div class="achievement-description">Collect a stamp after 8 PM</div>
+          </div>
+
+          <div class="achievement-card" role="button" tabindex="0" aria-label="Perfect Week achievement - Locked">
+            <div class="achievement-badge locked">🔒</div>
+            <div class="achievement-name">Perfect Week</div>
+            <div class="achievement-description">Collect a stamp every day for 7 days</div>
+            <div class="achievement-progress">
+              <div class="achievement-progress-bar">
+                <div class="achievement-progress-fill" style="width: 28%;"></div>
+              </div>
+              <span>2/7 days</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <a href="map-view.html" class="nav-item" aria-label="Map view">
+        <span class="nav-item-icon">🗺️</span>
+        <span class="nav-item-label">Map</span>
+      </a>
+      <a href="passport-view.html" class="nav-item" aria-label="Passport view">
+        <span class="nav-item-icon">🏔️</span>
+        <span class="nav-item-label">Passport</span>
+      </a>
+      <a href="achievements.html" class="nav-item active" aria-label="Achievements" aria-current="page">
+        <span class="nav-item-icon">⭐</span>
+        <span class="nav-item-label">Achievements</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Profile">
+        <span class="nav-item-icon">👤</span>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    // Achievement card interactions
+    document.querySelectorAll('.achievement-card, .milestone-item').forEach(card => {
+      card.addEventListener('click', function() {
+        const name = this.querySelector('.achievement-name, .milestone-name').textContent;
+        const description = this.querySelector('.achievement-description').textContent;
+        const isUnlocked = this.classList.contains('unlocked') || this.classList.contains('completed');
+        
+        if (isUnlocked) {
+          alert(`${name}\n\n${description}\n\nStatus: Unlocked ✓`);
+        } else {
+          const progress = this.querySelector('.achievement-progress span, .milestone-status');
+          const progressText = progress ? progress.textContent : 'Not started';
+          alert(`${name}\n\n${description}\n\nProgress: ${progressText}`);
+        }
+      });
+
+      // Keyboard navigation
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

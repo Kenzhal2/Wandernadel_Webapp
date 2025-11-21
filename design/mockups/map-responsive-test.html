@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map View - Responsive Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2d5016;
+    }
+    
+    .test-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .breakpoint-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .breakpoint-list li {
+      padding: 8px;
+      margin: 4px 0;
+      background: #f4e8d1;
+      border-left: 4px solid #2d5016;
+      border-radius: 4px;
+    }
+    
+    .breakpoint-list li strong {
+      color: #2d5016;
+    }
+    
+    .iframe-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .iframe-container h2 {
+      margin-top: 0;
+      color: #2d5016;
+    }
+    
+    iframe {
+      width: 100%;
+      border: 2px solid #2d5016;
+      border-radius: 8px;
+      display: block;
+    }
+    
+    .instructions {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      color: #856404;
+    }
+    
+    .instructions ol {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    
+    .instructions li {
+      margin: 4px 0;
+    }
+
+    .test-checklist {
+      background: #d1ecf1;
+      border: 1px solid #0c5460;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .test-checklist h3 {
+      margin-top: 0;
+      color: #0c5460;
+    }
+    
+    .test-checklist ul {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    
+    .test-checklist li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Map View - Responsive Test</h1>
+    
+    <div class="test-info">
+      <h2>Test Requirements</h2>
+      <p>Verify the map mockup is responsive and location card displays correctly at:</p>
+      <ul class="breakpoint-list">
+        <li><strong>320px (Mobile)</strong> - Location card at bottom, shows top 120px, expandable</li>
+        <li><strong>768px (Tablet)</strong> - Location card as side panel (400px width) on right</li>
+        <li><strong>1024px (Desktop)</strong> - Location card side panel (450px width)</li>
+        <li><strong>1920px (Large Desktop)</strong> - Location card side panel (500px width)</li>
+      </ul>
+    </div>
+    
+    <div class="instructions">
+      <h3>How to Test:</h3>
+      <ol>
+        <li>Open browser DevTools (F12)</li>
+        <li>Enable responsive design mode (Ctrl+Shift+M / Cmd+Shift+M)</li>
+        <li>Test each breakpoint: 320px, 768px, 1024px, 1920px</li>
+        <li>Verify the following:
+          <ul>
+            <li>Map fills available viewport height</li>
+            <li>Location card displays correctly at each breakpoint</li>
+            <li>Card is expandable/collapsible on mobile</li>
+            <li>Card appears as side panel on tablet+</li>
+            <li>Touch targets are ≥44px</li>
+            <li>No horizontal scrolling</li>
+            <li>Markers are clickable and visible</li>
+            <li>User location indicator is visible</li>
+          </ul>
+        </li>
+        <li>Test on actual mobile device if possible</li>
+      </ol>
+    </div>
+
+    <div class="test-checklist">
+      <h3>Mobile (320px) Specific Tests:</h3>
+      <ul>
+        <li>✅ Location card appears at bottom, showing top 120px</li>
+        <li>✅ Card can be expanded by clicking toggle button</li>
+        <li>✅ Card scrolls smoothly when expanded</li>
+        <li>✅ Card doesn't overlap bottom navigation</li>
+        <li>✅ Map markers are large enough to tap (≥44px)</li>
+        <li>✅ Header buttons are touch-friendly</li>
+        <li>✅ Collect stamp button is full-width and accessible</li>
+      </ul>
+    </div>
+    
+    <div class="iframe-container">
+      <h2>Current Viewport: <span id="viewport-size">Resizing...</span></h2>
+      <iframe id="map-iframe" src="map-view.html" height="800"></iframe>
+    </div>
+    
+    <div class="test-info">
+      <h2>Expected Behavior at Each Breakpoint</h2>
+      <ul class="breakpoint-list">
+        <li><strong>320px:</strong> Bottom card (collapsed by default), full-width, expandable, compact spacing</li>
+        <li><strong>768px:</strong> Side panel card (400px), always visible, positioned on right, map adjusts width</li>
+        <li><strong>1024px:</strong> Side panel card (450px), more padding, larger image</li>
+        <li><strong>1920px:</strong> Side panel card (500px), optimal spacing, maximum image size</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // Update viewport size display
+    function updateViewportSize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      document.getElementById('viewport-size').textContent = `${width}px × ${height}px`;
+      
+      // Adjust iframe height based on viewport
+      const iframe = document.getElementById('map-iframe');
+      if (width < 768) {
+        iframe.height = '600';
+      } else if (width < 1024) {
+        iframe.height = '700';
+      } else {
+        iframe.height = '800';
+      }
+    }
+    
+    updateViewportSize();
+    window.addEventListener('resize', updateViewportSize);
+    
+    // Log breakpoint changes
+    let currentBreakpoint = '';
+    function checkBreakpoint() {
+      const width = window.innerWidth;
+      let breakpoint = '';
+      
+      if (width >= 1920) {
+        breakpoint = '1920px+ (Large Desktop) - Side panel 500px';
+      } else if (width >= 1024) {
+        breakpoint = '1024px-1919px (Desktop) - Side panel 450px';
+      } else if (width >= 768) {
+        breakpoint = '768px-1023px (Tablet) - Side panel 400px';
+      } else {
+        breakpoint = '320px-767px (Mobile) - Bottom card';
+      }
+      
+      if (breakpoint !== currentBreakpoint) {
+        currentBreakpoint = breakpoint;
+        console.log('Breakpoint changed to:', breakpoint);
+      }
+    }
+    
+    checkBreakpoint();
+    window.addEventListener('resize', checkBreakpoint);
+  </script>
+</body>
+</html>
+

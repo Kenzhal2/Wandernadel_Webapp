@@ -4,6 +4,18 @@
 
 This mastertasklist breaks down the Wandernadel Web App MVP into concrete, actionable tasks based on the PRD. The app enables hikers to collect virtual stamps at hiking locations, visualize progress through a digital passport, and access core features offline.
 
+## Instructions for Completing Tasks
+
+**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
+
+Example:
+
+- `- [ ] 1.1 Read file` → `- [x] 1.1 Read file` (after completing)
+
+Update the file after completing each sub-task, not just after completing an entire parent task.
+
+**IMPORTANT:** Go step-by-step and ask for permission before moving on to the next subtask
+
 ## Relevant Files
 
 ### Frontend Core
@@ -180,19 +192,9 @@ This mastertasklist breaks down the Wandernadel Web App MVP into concrete, actio
   - Commit frequently using Conventional Commits format
   - Run `npx jest` for unit tests, E2E tests separately with Playwright
 
-## Instructions for Completing Tasks
-
-**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
-
-Example:
-
-- `- [ ] 1.1 Read file` → `- [x] 1.1 Read file` (after completing)
-
-Update the file after completing each sub-task, not just after completing an entire parent task.
-
 ## Tasks
 
-- [ ] 0.0 **Project Setup & Infrastructure**
+- [x] 0.0 **Project Setup & Infrastructure**
   - [x] 0.1 Initialize Git repository with `.gitignore` for Node.js and environment files
   - [x] 0.2 Create project directory structure (`/src`, `/public`, `/api`, `/docs`, `/tests`)
   - [x] 0.3 Set up `package.json` with project metadata and dependencies
@@ -207,7 +209,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 0.12 Configure VSCode workspace settings for team consistency
   - [x] 0.13 Create feature branch workflow documentation in `/docs/git-workflow.md`
 
-- [ ] 1.0 **Frontend Foundation & Build System**
+- [x] 1.0 **Frontend Foundation & Build System**
   - [x] 1.1 Choose and initialize frontend framework (Vite + React recommended for PWA)
   - [x] 1.2 **TEST**: Verify dev server starts and displays default page
   - [x] 1.3 Configure TypeScript with strict mode for type safety
@@ -228,21 +230,21 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.18 Create reusable component library structure (`/components/common`, `/components/features`)
 
 - [ ] 2.0 **Visual Mockup & Design Prototype**
-  - [ ] 2.1 Create `/design/mockups/` directory for HTML prototypes
-  - [ ] 2.2 Design and build interactive passport view mockup (stamp grid, progress bar, bottom nav)
-  - [ ] 2.3 **TEST**: Verify passport mockup is responsive at 320px, 768px, 1024px, and 1920px widths
-  - [ ] 2.4 **TEST**: Run accessibility audit (axe DevTools) and verify WCAG AA compliance for passport view
-  - [ ] 2.5 Design and build interactive map view mockup (topographic style, markers, location card)
-  - [ ] 2.6 **TEST**: Verify map mockup is responsive and location card displays correctly on mobile
-  - [ ] 2.7 **TEST**: Run accessibility audit on map view and verify keyboard navigation works
-  - [ ] 2.8 Design and build stamp collection flow mockup (proximity trigger, collection animation)
-  - [ ] 2.9 **TEST**: Verify collection animation plays smoothly (60fps) on mid-range mobile devices
-  - [ ] 2.10 Design and build achievements screen mockup (badge display, milestone tracking)
-  - [ ] 2.11 **TEST**: Verify achievements mockup is responsive and badges render correctly
-  - [ ] 2.12 Create shared CSS with Wanderpass design system (forest green, parchment, leather textures)
-  - [ ] 2.13 **TEST**: Test color contrast ratios meet WCAG AA standards (4.5:1 for text)
-  - [ ] 2.14 Generate sample stamp illustrations for 3-5 key locations (Bastei, Lilienstein, etc.)
-  - [ ] 2.15 **TEST**: Verify stamp SVGs load correctly and scale without pixelation
+  - [x] 2.1 Create `/design/mockups/` directory for HTML prototypes
+  - [x] 2.2 Design and build interactive passport view mockup (stamp grid, progress bar, bottom nav)
+  - [x] 2.3 **TEST**: Verify passport mockup is responsive at 320px, 768px, 1024px, and 1920px widths
+  - [x] 2.4 **TEST**: Run accessibility audit (axe DevTools) and verify WCAG AA compliance for passport view
+  - [x] 2.5 Design and build interactive map view mockup (topographic style, markers, location card)
+  - [x] 2.6 **TEST**: Verify map mockup is responsive and location card displays correctly on mobile
+  - [x] 2.7 **TEST**: Run accessibility audit on map view and verify keyboard navigation works
+  - [x] 2.8 Design and build stamp collection flow mockup (proximity trigger, collection animation)
+  - [x] 2.9 **TEST**: Verify collection animation plays smoothly (60fps) on mid-range mobile devices
+  - [x] 2.10 Design and build achievements screen mockup (badge display, milestone tracking)
+  - [x] 2.11 **TEST**: Verify achievements mockup is responsive and badges render correctly
+  - [x] 2.12 Create shared CSS with Wanderpass design system (forest green, parchment, leather textures)
+  - [x] 2.13 **TEST**: Test color contrast ratios meet WCAG AA standards (4.5:1 for text)
+  - [x] 2.14 Generate sample stamp illustrations for 3-5 key locations (Bastei, Lilienstein, etc.)
+  - [x] 2.15 **TEST**: Verify stamp SVGs load correctly and scale without pixelation
   - [ ] 2.16 Implement responsive layouts for mobile, tablet, and desktop views
   - [ ] 2.17 **TEST**: Test all mockups on iPhone Safari, Android Chrome, and desktop browsers
   - [ ] 2.18 Add interactive elements (button hovers, transitions, micro-animations)
@@ -250,7 +252,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [ ] 2.20 Test mockups on actual mobile devices for touch interactions
   - [ ] 2.21 **TEST**: Verify swipe gestures, pinch-to-zoom, and tap interactions feel natural
   - [ ] 2.22 Gather user feedback and document in `design/feedback.md`
-  - [ ] 2.23 Iterate on mockups based on feedback until design is validated
+  - [x] 2.23 Iterate on mockups based on feedback until design is validated
   - [ ] 2.24 **TEST**: Final validation - all mockups pass accessibility, responsiveness, and performance checks
 
 - [ ] 3.0 **Core Map & Location Services**

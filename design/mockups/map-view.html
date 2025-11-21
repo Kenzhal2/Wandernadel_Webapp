@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map View - Sächsische Schweiz Wandernadel</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Map-specific styles */
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px - 80px);
+      /* Full height minus header and nav */
+      background-color: #e6d5b8;
+      background-image:
+        /* Contour lines effect */
+        repeating-radial-gradient(circle at 0 0,
+          transparent 0,
+          #e6d5b8 10px,
+          #dccab0 11px,
+          #e6d5b8 12px),
+        repeating-radial-gradient(circle at 100% 100%,
+          transparent 0,
+          #e6d5b8 10px,
+          #dccab0 11px,
+          #e6d5b8 12px);
+      position: relative;
+      overflow: hidden;
+      touch-action: pan-x pan-y;
+    }
+
+    /* Overlay for texture */
+    .map-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Map markers - Pins */
+    .map-marker {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .map-marker-pin {
+      width: 30px;
+      height: 30px;
+      background: var(--color-forest-green);
+      border: 2px solid var(--color-white);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .map-marker-pin::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 50%;
+      transform: rotate(45deg);
+      /* Counteract parent rotation */
+    }
+
+    .map-marker:hover {
+      transform: translateY(-4px) scale(1.1);
+      z-index: 20;
+    }
+
+    /* Collected: Gold Star Pin */
+    .map-marker.collected .map-marker-pin {
+      background: var(--color-achievement-gold);
+      border-color: #fff;
+    }
+
+    .map-marker.collected .map-marker-pin::after {
+      content: '★';
+      background: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      transform: rotate(45deg);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      width: auto;
+      height: auto;
+    }
+
+    /* Available: Pulsing Green */
+    .map-marker.available .map-marker-pin {
+      background: #5c8a46;
+      animation: pinPulse 2s infinite;
+    }
+
+    @keyframes pinPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(92, 138, 70, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(92, 138, 70, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(92, 138, 70, 0);
+      }
+    }
+
+    /* Uncollected: Dark Green */
+    .map-marker.uncollected .map-marker-pin {
+      background: #2c4c3b;
+    }
+
+    .map-marker-label {
+      margin-top: 8px;
+      font-family: var(--font-family-sans);
+      font-size: 12px;
+      font-weight: 700;
+      color: #2c3e50;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 2px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    /* User location indicator - Blue Dot */
+    .user-location {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      z-index: 15;
+    }
+
+    .user-location-dot {
+      width: 16px;
+      height: 16px;
+      background-color: #3b82f6;
+      border: 2px solid white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .user-location-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background-color: rgba(59, 130, 246, 0.3);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      z-index: 1;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Location detail card */
+    .location-card {
+      position: fixed;
+      bottom: 80px;
+      /* Above bottom nav */
+      left: 0;
+      right: 0;
+      background:
+        /* Leather texture base */
+        linear-gradient(135deg, rgba(139, 90, 43, 0.05) 0%, rgba(101, 67, 33, 0.05) 100%),
+        /* Parchment base */
+        var(--color-parchment);
+      background-image:
+        /* Leather grain */
+        repeating-linear-gradient(45deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 90, 43, 0.03) 2px,
+          rgba(139, 90, 43, 0.03) 4px),
+        /* Leather wear patterns */
+        radial-gradient(circle at 20% 30%, rgba(139, 90, 43, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(101, 67, 33, 0.08) 0%, transparent 50%);
+      border: 4px solid #8b5a2b;
+      border-radius: 12px 12px 0 0;
+      box-shadow:
+        inset 0 0 0 1px rgba(139, 90, 43, 0.4),
+        inset 0 2px 4px rgba(139, 90, 43, 0.1),
+        0 -6px 20px rgba(0, 0, 0, 0.25),
+        0 -2px 8px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      transform: translateY(calc(100% - 160px));
+      /* Show top 160px by default */
+      transition: transform 0.3s ease;
+      z-index: 100;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Leather stitching effect - top */
+    .location-card::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 16px;
+      right: 16px;
+      height: 8px;
+      background: repeating-linear-gradient(to right,
+          #8b5a2b,
+          #8b5a2b 3px,
+          rgba(139, 90, 43, 0.3) 3px,
+          rgba(139, 90, 43, 0.3) 5px,
+          #8b5a2b 5px,
+          #8b5a2b 8px);
+      border-radius: 4px 4px 0 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Leather stitching effect - bottom */
+    .location-card::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 16px;
+      right: 16px;
+      height: 8px;
+      background: repeating-linear-gradient(to right,
+          #8b5a2b,
+          #8b5a2b 3px,
+          rgba(139, 90, 43, 0.3) 3px,
+          rgba(139, 90, 43, 0.3) 5px,
+          #8b5a2b 5px,
+          #8b5a2b 8px);
+      border-radius: 0 0 4px 4px;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .location-card.expanded {
+      transform: translateY(0);
+    }
+
+    .location-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .location-card-title {
+      font-family: var(--font-family-serif);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-forest-green-dark);
+      margin: 0 0 4px 0;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .location-card-toggle {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .location-card-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .location-card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 0 0 1px rgba(139, 90, 43, 0.2);
+      border: 2px solid rgba(139, 90, 43, 0.3);
+    }
+
+    .location-card-info {
+      margin-bottom: 16px;
+    }
+
+    .location-info-line {
+      font-size: 15px;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .location-info-line strong {
+      color: var(--color-forest-green-dark);
+      font-weight: 700;
+    }
+
+    .collect-stamp-button {
+      width: 100%;
+      background: linear-gradient(135deg, var(--color-forest-green) 0%, var(--color-forest-green-dark) 100%);
+      color: var(--color-parchment-light);
+      border: none;
+      padding: 18px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+      box-shadow:
+        0 4px 12px rgba(45, 80, 22, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .collect-stamp-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .collect-stamp-button:hover::before {
+      left: 100%;
+    }
+
+    .collect-stamp-button:hover {
+      background: linear-gradient(135deg, var(--color-forest-green-light) 0%, var(--color-forest-green) 100%);
+      box-shadow:
+        0 6px 16px rgba(45, 80, 22, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .collect-stamp-button:active {
+      transform: translateY(0);
+      box-shadow:
+        0 2px 6px rgba(45, 80, 22, 0.4),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .collect-stamp-button:disabled {
+      background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+      cursor: not-allowed;
+      opacity: 0.7;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .collect-stamp-icon {
+      font-size: 20px;
+    }
+
+    /* Map header */
+    .map-header {
+      background: linear-gradient(135deg, var(--color-forest-green) 0%, var(--color-forest-green-dark) 100%);
+      color: var(--color-parchment-light);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 50;
+    }
+
+    .map-header-title {
+      font-family: var(--font-family-serif);
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      flex: 1;
+      text-align: center;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .map-header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .map-header-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--color-parchment-light);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      min-height: 40px;
+      type: button;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .map-header-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .map-header-button:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .map-header-button:focus-visible {
+      outline: 2px solid var(--color-ochre);
+      outline-offset: 2px;
+    }
+
+    /* Mobile: 320px - Full width card, compact spacing */
+    @media (min-width: 320px) {
+      .map-container {
+        height: calc(100vh - 56px - 72px);
+        /* Adjusted for smaller header/nav */
+      }
+
+      .location-card {
+        padding: 16px;
+        transform: translateY(calc(100% - 120px));
+        /* Show top 120px */
+      }
+
+      .location-card-title {
+        font-size: 20px;
+      }
+
+      .location-card-image {
+        height: 160px;
+      }
+
+      .location-info-line {
+        font-size: 13px;
+      }
+
+      .collect-stamp-button {
+        padding: 14px 20px;
+        font-size: 15px;
+      }
+
+      .map-header {
+        padding: 10px 12px;
+      }
+
+      .map-header-title {
+        font-size: 16px;
+      }
+
+      .map-header-button {
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 18px;
+      }
+    }
+
+    /* Tablet: 768px - Side panel card */
+    @media (min-width: 768px) {
+      .map-container {
+        height: calc(100vh - 60px - 80px);
+      }
+
+      .location-card {
+        left: auto;
+        right: 20px;
+        width: 400px;
+        max-width: calc(100% - 40px);
+        border-top: none;
+        border: 3px solid #8b5a2b;
+        border-radius: 8px;
+        bottom: 100px;
+        transform: translateY(0);
+        padding: 20px;
+      }
+
+      .location-card.expanded {
+        transform: translateY(0);
+      }
+
+      .location-card-title {
+        font-size: 24px;
+      }
+
+      .location-card-image {
+        height: 200px;
+      }
+
+      .location-info-line {
+        font-size: 14px;
+      }
+
+      .map-header-title {
+        font-size: 20px;
+      }
+
+      .map-header {
+        padding: 12px 20px;
+      }
+    }
+
+    /* Desktop: 1024px - Larger side panel */
+    @media (min-width: 1024px) {
+      .location-card {
+        width: 450px;
+        right: 32px;
+        bottom: 120px;
+        padding: 24px;
+      }
+
+      .location-card-title {
+        font-size: 26px;
+      }
+
+      .location-card-image {
+        height: 240px;
+      }
+
+      .map-header-title {
+        font-size: 22px;
+      }
+    }
+
+    /* Large Desktop: 1920px - Optimal spacing */
+    @media (min-width: 1920px) {
+      .location-card {
+        width: 500px;
+        right: 40px;
+        bottom: 140px;
+        padding: 28px;
+      }
+
+      .location-card-title {
+        font-size: 28px;
+      }
+
+      .location-card-image {
+        height: 280px;
+      }
+
+      .map-header-title {
+        font-size: 24px;
+      }
+    }
+
+    /* Placeholder for map image - now uses the container background */
+    .map-placeholder {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body class="parchment-bg">
+  <div class="page-container" style="padding-bottom: 0;">
+    <!-- Skip link -->
+    <a href="#main-content" class="sr-only skip-link">Skip to main content</a>
+
+    <!-- Map Header -->
+    <header class="map-header" role="banner">
+      <button class="map-header-button" aria-label="Search locations" title="Search">
+        <span>🔍</span>
+      </button>
+      <h1 class="map-header-title">Sächsische Schweiz Wandernadel</h1>
+      <button class="map-header-button" aria-label="Filter locations" title="Filter">
+        <span>🔽</span>
+      </button>
+    </header>
+
+    <!-- Map Container -->
+    <main id="main-content" class="map-container" role="main"
+      aria-label="Interactive map showing hiking stamp locations">
+      <div class="map-placeholder" role="img" aria-label="Topographic map of Saxon Switzerland region">
+        <!-- User Location -->
+        <div class="user-location" style="top: 45%; left: 35%;" aria-label="Your current location" role="img"
+          aria-hidden="true">
+          <div class="user-location-pulse"></div>
+          <div class="user-location-dot"></div>
+        </div>
+
+        <!-- Map Markers -->
+        <button class="map-marker collected" style="top: 30%; left: 50%;"
+          aria-label="Basteibrücke - Stamp collected. Press Enter to view details" data-location="bastei" type="button">
+          <div class="map-marker-pin"></div>
+          <span class="map-marker-label">Bastei</span>
+        </button>
+
+        <button class="map-marker available" style="top: 40%; left: 60%;"
+          aria-label="Schrammsteine - Stamp available nearby. Press Enter to view details" data-location="schrammsteine"
+          type="button">
+          <div class="map-marker-pin"></div>
+          <span class="map-marker-label">Schrammsteine</span>
+        </button>
+
+        <button class="map-marker uncollected" style="top: 55%; left: 45%;"
+          aria-label="Königstein - Stamp location. Press Enter to view details" data-location="koenigstein"
+          type="button">
+          <div class="map-marker-pin"></div>
+          <span class="map-marker-label">Königstein</span>
+        </button>
+
+        <button class="map-marker collected" style="top: 50%; left: 55%;"
+          aria-label="Lilienstein - Stamp collected. Press Enter to view details" data-location="lilienstein"
+          type="button">
+          <div class="map-marker-pin"></div>
+          <span class="map-marker-label">Lilienstein</span>
+        </button>
+
+        <button class="map-marker uncollected" style="top: 65%; left: 50%;"
+          aria-label="Pfaffenstein - Stamp location. Press Enter to view details" data-location="pfaffenstein"
+          type="button">
+          <div class="map-marker-pin"></div>
+          <span class="map-marker-label">Pfaffenstein</span>
+        </button>
+      </div>
+
+      <!-- Location Detail Card -->
+      <div class="location-card" id="location-card" role="region" aria-labelledby="location-card-title"
+        aria-describedby="location-card-info">
+        <div class="location-card-header">
+          <h2 class="location-card-title" id="location-card-title">Basteibrücke</h2>
+          <button class="location-card-toggle" aria-label="Toggle card expansion" aria-expanded="false"
+            id="card-toggle">
+            <span id="toggle-icon">▲</span>
+          </button>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
+          alt="Basteibrücke - A majestic stone arch bridge connecting dramatic rock formations"
+          class="location-card-image" loading="lazy">
+
+        <div class="location-card-info" id="location-card-info">
+          <div class="location-info-line">
+            <span><strong>Distance:</strong> <span id="location-distance">0.5 km</span></span>
+            <span> - </span>
+            <span><strong>Difficulty:</strong> <span id="location-difficulty">Easy</span></span>
+            <span> - </span>
+            <span><strong>Status:</strong> <span id="stamp-status" aria-live="polite">Uncollected</span></span>
+          </div>
+        </div>
+
+        <button class="collect-stamp-button" id="collect-button" aria-label="Collect stamp at Basteibrücke">
+          <span class="collect-stamp-icon">✉️</span>
+          <span>COLLECT STAMP</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <a href="map-view.html" class="nav-item active" aria-label="Map view" aria-current="page">
+        <span class="nav-item-icon">🗺️</span>
+        <span class="nav-item-label">Map</span>
+      </a>
+      <a href="passport-view.html" class="nav-item" aria-label="Passport view">
+        <span class="nav-item-icon">🏔️</span>
+        <span class="nav-item-label">Passport</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Routes">
+        <span class="nav-item-icon">🛤️</span>
+        <span class="nav-item-label">Routes</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Profile">
+        <span class="nav-item-icon">👤</span>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    // Location data
+    const locations = {
+      bastei: {
+        name: 'Basteibrücke',
+        distance: '0.5 km',
+        difficulty: 'Easy',
+        collected: true,
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+      },
+      schrammsteine: {
+        name: 'Schrammsteine',
+        distance: '1.2 km',
+        difficulty: 'Moderate',
+        collected: false,
+        available: true,
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+      },
+      koenigstein: {
+        name: 'Königstein',
+        distance: '2.8 km',
+        difficulty: 'Easy',
+        collected: false,
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+      },
+      lilienstein: {
+        name: 'Lilienstein',
+        distance: '3.5 km',
+        difficulty: 'Moderate',
+        collected: true,
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+      },
+      pfaffenstein: {
+        name: 'Pfaffenstein',
+        distance: '4.2 km',
+        difficulty: 'Hard',
+        collected: false,
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+      }
+    };
+
+    // Card toggle functionality
+    const cardToggle = document.getElementById('card-toggle');
+    const locationCard = document.getElementById('location-card');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    cardToggle.addEventListener('click', () => {
+      const isExpanded = locationCard.classList.toggle('expanded');
+      cardToggle.setAttribute('aria-expanded', isExpanded);
+      toggleIcon.textContent = isExpanded ? '▼' : '▲';
+    });
+
+    // Marker click handlers
+    document.querySelectorAll('.map-marker').forEach(marker => {
+      marker.addEventListener('click', function () {
+        const locationId = this.getAttribute('data-location');
+        const location = locations[locationId];
+
+        if (location) {
+          updateLocationCard(location);
+          locationCard.classList.add('expanded');
+          cardToggle.setAttribute('aria-expanded', 'true');
+          toggleIcon.textContent = '▼';
+        }
+      });
+
+      // Keyboard navigation
+      marker.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    // Update location card
+    function updateLocationCard(location) {
+      document.getElementById('location-card-title').textContent = location.name;
+      document.querySelector('.location-card-image').alt = `${location.name} - Hiking location`;
+      document.querySelector('.location-card-image').src = location.image;
+
+      // Update location card with new data
+      document.getElementById('location-distance').textContent = location.distance;
+      document.getElementById('location-difficulty').textContent = location.difficulty;
+
+      const statusItem = document.getElementById('stamp-status');
+      const collectButton = document.getElementById('collect-button');
+
+      // Update card title for screen readers
+      locationCard.setAttribute('aria-label', `Location details for ${location.name}`);
+
+      if (location.collected) {
+        statusItem.textContent = 'Collected';
+        collectButton.disabled = true;
+        collectButton.textContent = '✓ STAMP COLLECTED';
+        collectButton.setAttribute('aria-label', `Stamp at ${location.name} already collected`);
+      } else if (location.available) {
+        statusItem.textContent = 'Available';
+        collectButton.disabled = false;
+        collectButton.innerHTML = '<span class="collect-stamp-icon">✉️</span><span>COLLECT STAMP</span>';
+        collectButton.setAttribute('aria-label', `Collect stamp at ${location.name}`);
+      } else {
+        statusItem.textContent = 'Uncollected';
+        collectButton.disabled = true;
+        collectButton.textContent = 'TOO FAR AWAY';
+        collectButton.setAttribute('aria-label', `Cannot collect stamp at ${location.name} - too far away`);
+      }
+    }
+
+    // Collect stamp button
+    document.getElementById('collect-button').addEventListener('click', function () {
+      if (!this.disabled) {
+        const locationName = document.getElementById('location-card-title').textContent;
+        alert(`Collecting stamp at ${locationName}! 🎉`);
+        // In real app, this would trigger collection logic
+      }
+    });
+
+    // Close card when clicking outside (on mobile)
+    document.querySelector('.map-container').addEventListener('click', function (e) {
+      if (e.target === this || e.target.classList.contains('map-placeholder')) {
+        locationCard.classList.remove('expanded');
+        cardToggle.setAttribute('aria-expanded', 'false');
+        toggleIcon.textContent = '▲';
+      }
+    });
+  </script>
+</body>
+
+</html>
