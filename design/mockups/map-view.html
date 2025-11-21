@@ -192,13 +192,153 @@
         opacity: 1;
       }
 
+      100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Location detail card - Exact Mockup Match */
+    .location-card {
+      position: fixed;
+      bottom: 80px;
+      left: 16px;
+      right: 16px;
+      /* Aged Parchment Background */
+      background-color: #e3d5b8;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+
+      /* Thick Leather Border */
+      border: 12px solid #8b5a2b;
+      border-radius: 20px;
+
+      /* Deep Shadow */
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 0 40px rgba(139, 90, 43, 0.3);
+
+      padding: 20px;
+      transform: translateY(calc(100% + 20px));
+      /* Hidden by default */
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 100;
+      max-height: 80vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Stitching Effect */
+    .location-card::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      right: -6px;
+      bottom: -6px;
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .location-card.expanded {
+      transform: translateY(0);
+    }
+
+    .location-card-header {
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .location-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #3e2723;
+      margin: 0;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Toggle button hidden in this design as it's a popup */
+    .location-card-toggle {
+      display: none;
+    }
+
+    .location-card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      /* No border, just the image */
+    }
+
+    .location-card-info {
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .location-info-line {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #4e342e;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .collect-stamp-button {
+      width: 100%;
+      background-color: #2e4e28;
+      /* Matte Dark Green */
+      color: #f1f8e9;
+      border: none;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 0 #1b3016;
+      /* Subtle 3D edge */
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .collect-stamp-button:hover {
+      background-color: #3a6032;
+    }
+
+    .collect-stamp-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1b3016;
+    }
+
+    .collect-stamp-icon {
+      width: 24px;
+      height: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1f8e9'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    /* Map header */
+    .map-header {
+      background: linear-gradient(135deg, var(--color-forest-green) 0%, var(--color-forest-green-dark) 100%);
       color: var(--color-parchment-light);
       padding: 14px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
       position: relative;
       z-index: 50;
     }
@@ -254,136 +394,23 @@
       outline-offset: 2px;
     }
 
-    /* Mobile: 320px - Full width card, compact spacing */
-    @media (min-width: 320px) {
-      .map-container {
-        height: calc(100vh - 56px - 72px);
-        /* Adjusted for smaller header/nav */
-      }
-
-      .location-card {
-        padding: 16px;
-        transform: translateY(calc(100% - 120px));
-        /* Show top 120px */
-      }
-
-      .location-card-title {
-        font-size: 20px;
-      }
-
-      .location-card-image {
-        height: 160px;
-      }
-
-      .location-info-line {
-        font-size: 13px;
-      }
-
-      .collect-stamp-button {
-        padding: 14px 20px;
-        font-size: 15px;
-      }
-
-      .map-header {
-        padding: 10px 12px;
-      }
-
-      .map-header-title {
-        font-size: 16px;
-      }
-
-      .map-header-button {
-        min-width: 36px;
-        min-height: 36px;
-        font-size: 18px;
-      }
-    }
-
-    /* Tablet: 768px - Side panel card */
+    /* Tablet/Desktop Adjustments */
     @media (min-width: 768px) {
-      .map-container {
-        height: calc(100vh - 60px - 80px);
-      }
-
       .location-card {
         left: auto;
-        right: 20px;
-        width: 400px;
-        max-width: calc(100% - 40px);
-        border-top: none;
-        border: 3px solid #8b5a2b;
-        border-radius: 8px;
-        bottom: 100px;
+        right: 32px;
+        bottom: 32px;
+        width: 360px;
         transform: translateY(0);
-        padding: 20px;
+        /* Always visible or different toggle logic */
+        opacity: 0;
+        pointer-events: none;
       }
 
       .location-card.expanded {
+        opacity: 1;
+        pointer-events: auto;
         transform: translateY(0);
-      }
-
-      .location-card-title {
-        font-size: 24px;
-      }
-
-      .location-card-image {
-        height: 200px;
-      }
-
-      .location-info-line {
-        font-size: 14px;
-      }
-
-      .map-header-title {
-        font-size: 20px;
-      }
-
-      .map-header {
-        padding: 12px 20px;
-      }
-    }
-
-    /* Desktop: 1024px - Larger side panel */
-    @media (min-width: 1024px) {
-      .location-card {
-        width: 450px;
-        right: 32px;
-        bottom: 120px;
-        padding: 24px;
-      }
-
-      .location-card-title {
-        font-size: 26px;
-      }
-
-      .location-card-image {
-        height: 240px;
-      }
-
-      .map-header-title {
-        font-size: 22px;
-      }
-    }
-
-    /* Large Desktop: 1920px - Optimal spacing */
-    @media (min-width: 1920px) {
-      .location-card {
-        width: 500px;
-        right: 40px;
-        bottom: 140px;
-        padding: 28px;
-      }
-
-      .location-card-title {
-        font-size: 28px;
-      }
-
-      .location-card-image {
-        height: 280px;
-      }
-
-      .map-header-title {
-        font-size: 24px;
       }
     }
 
@@ -464,10 +491,6 @@
         aria-describedby="location-card-info">
         <div class="location-card-header">
           <h2 class="location-card-title" id="location-card-title">Basteibrücke</h2>
-          <button class="location-card-toggle" aria-label="Toggle card expansion" aria-expanded="false"
-            id="card-toggle">
-            <span id="toggle-icon">▲</span>
-          </button>
         </div>
 
         <img
@@ -476,16 +499,13 @@
 
         <div class="location-card-info" id="location-card-info">
           <div class="location-info-line">
-            <strong>Distance:</strong> 2.5 km &nbsp;•&nbsp; <strong>Difficulty:</strong> Easy
-          </div>
-          <div class="location-info-line">
-            <strong>Time:</strong> 1 hour &nbsp;•&nbsp; <strong>Elevation:</strong> 194m
+            Distance: 0.5 km - Difficulty: Easy - Status: Uncollected
           </div>
         </div>
 
         <button class="collect-stamp-button" type="button" id="collect-button">
-          <span class="collect-stamp-icon">★</span>
-          <span>Stamp Collected</span>
+          <span class="collect-stamp-icon"></span>
+          <span>COLLECT STAMP</span>
         </button>
       </div>
     </main>
@@ -553,15 +573,7 @@
     };
 
     // Card toggle functionality
-    const cardToggle = document.getElementById('card-toggle');
     const locationCard = document.getElementById('location-card');
-    const toggleIcon = document.getElementById('toggle-icon');
-
-    cardToggle.addEventListener('click', () => {
-      const isExpanded = locationCard.classList.toggle('expanded');
-      cardToggle.setAttribute('aria-expanded', isExpanded);
-      toggleIcon.textContent = isExpanded ? '▼' : '▲';
-    });
 
     // Marker click handlers
     document.querySelectorAll('.map-marker').forEach(marker => {
@@ -572,8 +584,6 @@
         if (location) {
           updateLocationCard(location);
           locationCard.classList.add('expanded');
-          cardToggle.setAttribute('aria-expanded', 'true');
-          toggleIcon.textContent = '▼';
         }
       });
 
@@ -592,11 +602,10 @@
       document.querySelector('.location-card-image').alt = `${location.name} - Hiking location`;
       document.querySelector('.location-card-image').src = location.image;
 
-      // Update location card with new data
-      // Note: In a real app, we would have dynamic data for time and elevation too
-      document.querySelector('.location-info-line:first-child').innerHTML = `<strong>Distance:</strong> ${location.distance} &nbsp;•&nbsp; <strong>Difficulty:</strong> ${location.difficulty}`;
+      // Update location card with new data format
+      const statusText = location.collected ? 'Collected' : 'Uncollected';
+      document.querySelector('.location-info-line').textContent = `Distance: ${location.distance} - Difficulty: ${location.difficulty} - Status: ${statusText}`;
 
-      const statusItem = document.getElementById('stamp-status');
       const collectButton = document.getElementById('collect-button');
 
       // Update card title for screen readers
@@ -604,11 +613,11 @@
 
       if (location.collected) {
         collectButton.disabled = true;
-        collectButton.innerHTML = '<span class="collect-stamp-icon">★</span><span>Stamp Collected</span>';
+        collectButton.innerHTML = '<span class="collect-stamp-icon"></span><span>STAMP COLLECTED</span>';
         collectButton.setAttribute('aria-label', `Stamp at ${location.name} already collected`);
       } else if (location.available) {
         collectButton.disabled = false;
-        collectButton.innerHTML = '<span class="collect-stamp-icon">✉️</span><span>COLLECT STAMP</span>';
+        collectButton.innerHTML = '<span class="collect-stamp-icon"></span><span>COLLECT STAMP</span>';
         collectButton.setAttribute('aria-label', `Collect stamp at ${location.name}`);
       } else {
         collectButton.disabled = true;
@@ -629,8 +638,6 @@
     document.querySelector('.map-container').addEventListener('click', function (e) {
       if (e.target === this || e.target.classList.contains('map-placeholder')) {
         locationCard.classList.remove('expanded');
-        cardToggle.setAttribute('aria-expanded', 'false');
-        toggleIcon.textContent = '▲';
       }
     });
   </script>
