@@ -344,58 +344,49 @@
 
     .collect-stamp-button {
       width: 100%;
-      background: linear-gradient(135deg, var(--color-forest-green) 0%, var(--color-forest-green-dark) 100%);
+      background: linear-gradient(180deg, #4d7a2a 0%, #2d5016 100%);
       color: var(--color-parchment-light);
-      border: none;
-      padding: 18px 24px;
-      font-size: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 16px 24px;
+      font-size: 14px;
       font-weight: 700;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       transition: all 0.2s ease;
       box-shadow:
-        0 4px 12px rgba(45, 80, 22, 0.4),
-        0 2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 4px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       position: relative;
       overflow: hidden;
+      font-family: var(--font-family-sans);
     }
 
     .collect-stamp-button::before {
       content: '';
       position: absolute;
       top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .collect-stamp-button:hover::before {
-      left: 100%;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+      pointer-events: none;
     }
 
     .collect-stamp-button:hover {
-      background: linear-gradient(135deg, var(--color-forest-green-light) 0%, var(--color-forest-green) 100%);
-      box-shadow:
-        0 6px 16px rgba(45, 80, 22, 0.5),
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-      transform: translateY(-2px);
+      background: linear-gradient(180deg, #5c8a46 0%, #3d6a20 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     }
 
     .collect-stamp-button:active {
-      transform: translateY(0);
-      box-shadow:
-        0 2px 6px rgba(45, 80, 22, 0.4),
-        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .collect-stamp-button:disabled {
@@ -448,6 +439,18 @@
       font-size: 20px;
       cursor: pointer;
       padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      min-height: 40px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .map-header-button:hover {
+      background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.3);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       transform: translateY(-1px);
@@ -679,23 +682,22 @@
           </button>
         </div>
 
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
-          alt="Basteibrücke - A majestic stone arch bridge connecting dramatic rock formations"
-          class="location-card-image" loading="lazy">
+        <img
+          src="https://images.unsplash.com/photo-1565627382-4179196d9c67?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+          alt="Basteibrücke view" class="location-card-image">
 
         <div class="location-card-info" id="location-card-info">
           <div class="location-info-line">
-            <span><strong>Distance:</strong> <span id="location-distance">0.5 km</span></span>
-            <span> - </span>
-            <span><strong>Difficulty:</strong> <span id="location-difficulty">Easy</span></span>
-            <span> - </span>
-            <span><strong>Status:</strong> <span id="stamp-status" aria-live="polite">Uncollected</span></span>
+            <strong>Distance:</strong> 2.5 km &nbsp;•&nbsp; <strong>Difficulty:</strong> Easy
+          </div>
+          <div class="location-info-line">
+            <strong>Time:</strong> 1 hour &nbsp;•&nbsp; <strong>Elevation:</strong> 194m
           </div>
         </div>
 
-        <button class="collect-stamp-button" id="collect-button" aria-label="Collect stamp at Basteibrücke">
-          <span class="collect-stamp-icon">✉️</span>
-          <span>COLLECT STAMP</span>
+        <button class="collect-stamp-button" type="button" id="collect-button">
+          <span class="collect-stamp-icon">★</span>
+          <span>Stamp Collected</span>
         </button>
       </div>
     </main>
@@ -726,10 +728,10 @@
     const locations = {
       bastei: {
         name: 'Basteibrücke',
-        distance: '0.5 km',
+        distance: '2.5 km',
         difficulty: 'Easy',
         collected: true,
-        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop'
+        image: 'https://images.unsplash.com/photo-1565627382-4179196d9c67?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
       },
       schrammsteine: {
         name: 'Schrammsteine',
@@ -803,8 +805,8 @@
       document.querySelector('.location-card-image').src = location.image;
 
       // Update location card with new data
-      document.getElementById('location-distance').textContent = location.distance;
-      document.getElementById('location-difficulty').textContent = location.difficulty;
+      // Note: In a real app, we would have dynamic data for time and elevation too
+      document.querySelector('.location-info-line:first-child').innerHTML = `<strong>Distance:</strong> ${location.distance} &nbsp;•&nbsp; <strong>Difficulty:</strong> ${location.difficulty}`;
 
       const statusItem = document.getElementById('stamp-status');
       const collectButton = document.getElementById('collect-button');
@@ -813,17 +815,14 @@
       locationCard.setAttribute('aria-label', `Location details for ${location.name}`);
 
       if (location.collected) {
-        statusItem.textContent = 'Collected';
         collectButton.disabled = true;
-        collectButton.textContent = '✓ STAMP COLLECTED';
+        collectButton.innerHTML = '<span class="collect-stamp-icon">★</span><span>Stamp Collected</span>';
         collectButton.setAttribute('aria-label', `Stamp at ${location.name} already collected`);
       } else if (location.available) {
-        statusItem.textContent = 'Available';
         collectButton.disabled = false;
         collectButton.innerHTML = '<span class="collect-stamp-icon">✉️</span><span>COLLECT STAMP</span>';
         collectButton.setAttribute('aria-label', `Collect stamp at ${location.name}`);
       } else {
-        statusItem.textContent = 'Uncollected';
         collectButton.disabled = true;
         collectButton.textContent = 'TOO FAR AWAY';
         collectButton.setAttribute('aria-label', `Cannot collect stamp at ${location.name} - too far away`);
@@ -835,7 +834,6 @@
       if (!this.disabled) {
         const locationName = document.getElementById('location-card-title').textContent;
         alert(`Collecting stamp at ${locationName}! 🎉`);
-        // In real app, this would trigger collection logic
       }
     });
 
