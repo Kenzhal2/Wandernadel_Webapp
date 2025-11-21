@@ -208,24 +208,24 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 0.13 Create feature branch workflow documentation in `/docs/git-workflow.md`
 
 - [ ] 1.0 **Frontend Foundation & Build System**
-  - [ ] 1.1 Choose and initialize frontend framework (Vite + React recommended for PWA)
-  - [ ] 1.2 **TEST**: Verify dev server starts and displays default page
-  - [ ] 1.3 Configure TypeScript with strict mode for type safety
-  - [ ] 1.4 **TEST**: Create sample component with type errors and verify TypeScript catches them
-  - [ ] 1.5 Set up PWA configuration with service worker and manifest.json
-  - [ ] 1.6 **TEST**: Validate manifest.json with Lighthouse and verify service worker registers correctly
-  - [ ] 1.7 Configure build system with code splitting and tree shaking
-  - [ ] 1.8 **TEST**: Run production build and verify bundle size is optimized (<500KB initial load)
-  - [ ] 1.9 Implement responsive CSS architecture with mobile-first approach
-  - [ ] 1.10 Create base CSS variables for Wanderpass color palette (forest green, parchment, ochre)
-  - [ ] 1.11 **TEST**: Verify CSS variables are accessible and render correctly in browser
-  - [ ] 1.12 Set up routing system for Map, Passport, and Achievements views
-  - [ ] 1.13 **TEST**: Verify all routes navigate correctly and URLs update properly
-  - [ ] 1.14 Implement loading states and error boundaries
-  - [ ] 1.15 **TEST**: Trigger error in component and verify error boundary catches it gracefully
-  - [ ] 1.16 Configure asset optimization (image compression, lazy loading)
-  - [ ] 1.17 **TEST**: Verify images are lazy-loaded and compressed assets load correctly
-  - [ ] 1.18 Create reusable component library structure (`/components/common`, `/components/features`)
+  - [x] 1.1 Choose and initialize frontend framework (Vite + React recommended for PWA)
+  - [x] 1.2 **TEST**: Verify dev server starts and displays default page
+  - [x] 1.3 Configure TypeScript with strict mode for type safety
+  - [x] 1.4 **TEST**: Create sample component with type errors and verify TypeScript catches them
+  - [x] 1.5 Set up PWA configuration with service worker and manifest.json
+  - [x] 1.6 **TEST**: Validate manifest.json with Lighthouse and verify service worker registers correctly
+  - [x] 1.7 Configure build system with code splitting and tree shaking
+  - [x] 1.8 **TEST**: Run production build and verify bundle size is optimized (<500KB initial load)
+  - [x] 1.9 Implement responsive CSS architecture with mobile-first approach
+  - [x] 1.10 Create base CSS variables for Wanderpass color palette (forest green, parchment, ochre)
+  - [x] 1.11 **TEST**: Verify CSS variables are accessible and render correctly in browser
+  - [x] 1.12 Set up routing system for Map, Passport, and Achievements views
+  - [x] 1.13 **TEST**: Verify all routes navigate correctly and URLs update properly
+  - [x] 1.14 Implement loading states and error boundaries
+  - [x] 1.15 **TEST**: Trigger error in component and verify error boundary catches it gracefully
+  - [x] 1.16 Configure asset optimization (image compression, lazy loading)
+  - [x] 1.17 **TEST**: Verify images are lazy-loaded and compressed assets load correctly
+  - [x] 1.18 Create reusable component library structure (`/components/common`, `/components/features`)
 
 - [ ] 2.0 **Visual Mockup & Design Prototype**
   - [ ] 2.1 Create `/design/mockups/` directory for HTML prototypes

@@ -1,0 +1,133 @@
+/* Global Styles - Mobile-first approach */
+
+/* Import design tokens and utilities */
+@import './reset.css';
+@import './variables.css';
+@import './responsive.css';
+@import './themes/wanderpass.css';
+@import './animations.css';
+
+/* Base typography - Mobile-first */
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+
+  /* Wanderpass theme colors */
+  color-scheme: light;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base body styles - Mobile-first */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+/* Root container - Mobile-first */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Mobile: full width, no padding */
+  padding: 0;
+}
+
+/* Responsive root container */
+@media (min-width: 768px) {
+  #root {
+    /* Tablet: add some padding */
+    padding: var(--spacing-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  #root {
+    /* Desktop: center with max-width */
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Base heading styles - Mobile-first */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* Base paragraph styles */
+p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Touch target sizes for mobile (minimum 44x44px) */
+button,
+a,
+input[type='button'],
+input[type='submit'],
+input[type='checkbox'],
+input[type='radio'] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
