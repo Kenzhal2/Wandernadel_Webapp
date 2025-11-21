@@ -15,12 +15,14 @@
   <style>
     /* Passport-specific styles */
     body {
-      /* Aged Parchment Background matching the mockup */
-      background-color: #e6d5b8;
+      /* Darker Beige Background for the main body */
+      background-color: #e0d5c1;
       background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
       min-height: 100vh;
       display: flex;
       justify-content: center;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
     }
 
     .page-container {
@@ -29,119 +31,139 @@
       width: 100%;
       max-width: 480px;
       background: none;
-      /* Let body background show through */
       position: relative;
       min-height: 100vh;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.1) inset;
-      /* Vignette effect */
     }
 
-    /* Page Border Effect (Physical Card Look) */
-    .page-container::before {
-      content: '';
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-      border: 1px solid rgba(139, 90, 43, 0.2);
-      border-radius: 24px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Header */
-    .passport-header {
-      text-align: center;
-      padding: 32px 16px 24px;
+    /* --- Top Section (Header Card) --- */
+    .header-card {
+      background-color: #f0e6d2;
+      /* Lighter parchment */
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      padding: 32px 24px 40px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       position: relative;
-      z-index: 1;
+      z-index: 10;
+      margin-bottom: 32px;
+      /* Dashed border at the bottom to simulate stitching or separation */
+      border-bottom: 1px dashed rgba(139, 90, 43, 0.3);
     }
 
     .passport-title {
       font-family: 'Caveat', cursive;
-      /* Handwritten font */
-      font-size: 36px;
+      font-size: 42px;
       color: #5d4037;
-      margin: 0;
+      margin: 0 0 24px 0;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      text-align: center;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
-    /* Progress Section */
-    .progress-section {
-      padding: 0 24px 32px;
-      position: relative;
-      z-index: 1;
-    }
-
+    /* --- Progress Section (Leather Belt) --- */
     .progress-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      position: relative;
+      height: 56px;
       margin-bottom: 8px;
     }
 
-    .progress-icon {
-      font-size: 24px;
-      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
-      color: #5d4037;
-    }
-
+    /* The Leather Belt Track */
     .progress-track {
-      flex: 1;
+      position: absolute;
+      left: 24px;
+      right: 24px;
       height: 28px;
       background-color: #d7ccc8;
-      border-radius: 14px;
-      position: relative;
+      /* Light leather */
+      border-radius: 6px;
       box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.2),
         0 1px 0 rgba(255, 255, 255, 0.5);
-      border: 2px solid #8d6e63;
-      /* Stitching effect */
+      z-index: 1;
+      overflow: hidden;
+      border: 1px solid rgba(141, 110, 99, 0.3);
     }
 
+    /* Stitching on the track */
     .progress-track::after {
       content: '';
       position: absolute;
       top: 3px;
-      left: 3px;
-      right: 3px;
+      left: 0;
+      right: 0;
       bottom: 3px;
-      border: 1px dashed rgba(255, 255, 255, 0.4);
-      border-radius: 10px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.5);
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
       pointer-events: none;
     }
 
+    /* The Filled Part of the Belt */
     .progress-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
+      height: 100%;
       width: 45%;
       /* Example progress */
       background: linear-gradient(180deg, #a1887f 0%, #8d6e63 100%);
-      border-radius: 10px;
+      /* Darker leather gradient */
+      position: relative;
       box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      border-right: 1px solid rgba(93, 64, 55, 0.5);
+    }
+
+    /* Stitching on the fill */
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.6);
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.6);
+    }
+
+    /* Round Icon Badges */
+    .progress-icon-badge {
+      width: 56px;
+      height: 56px;
+      background-color: #e6d5b8;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 2;
+      box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(139, 90, 43, 0.15);
+    }
+
+    .progress-icon {
+      font-size: 28px;
+      color: #5d4037;
+      filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.5));
     }
 
     .progress-labels {
       display: flex;
       justify-content: space-between;
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-size: 15px;
       color: #4e342e;
       padding: 0 4px;
-      font-weight: 500;
+      font-weight: 600;
+      opacity: 0.9;
     }
 
-    /* Stamps Grid */
+    /* --- Stamps Grid --- */
     .stamps-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 32px 24px;
       padding: 0 24px;
       position: relative;
       z-index: 1;
@@ -171,7 +193,7 @@
       border: 4px solid #d4af37;
       /* Gold border */
       box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 6px 12px rgba(0, 0, 0, 0.25),
         inset 0 0 20px rgba(0, 0, 0, 0.1);
       overflow: hidden;
     }
@@ -195,22 +217,11 @@
       object-fit: cover;
     }
 
-    .stamp-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: #3e2723;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.6);
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-
     .stamp-label-overlay {
       position: absolute;
       top: 16px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 2px 10px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 4px 12px;
       border-radius: 12px;
       font-family: 'Inter', sans-serif;
       font-size: 12px;
@@ -223,7 +234,6 @@
 
     /* Locked Stamp Style - Refined */
     .stamp-item.locked .stamp-circle {
-      /* Rough ring effect using box-shadow and border */
       background-color: transparent;
       border: none;
       box-shadow: none;
@@ -238,21 +248,9 @@
       right: 0;
       bottom: 0;
       border-radius: 50%;
-      border: 8px solid rgba(0, 0, 0, 0.1);
-      /* Base grey ring */
-      /* Use a mask or rough border image if possible, but for CSS-only: */
-      box-shadow:
-        inset 2px 2px 4px rgba(255, 255, 255, 0.5),
-        inset -2px -2px 4px rgba(0, 0, 0, 0.2),
-        2px 2px 4px rgba(0, 0, 0, 0.1);
-      filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='rough'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='2' result='noise'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='3'/%3E%3C/filter%3E#rough");
-      /* Note: SVG filter might not work in all contexts without inline SVG, 
-         so we'll use a simpler visual trick for the "painted" look */
-      border: 6px solid #bdbdbd;
-      border-style: solid;
-      mask-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='90' fill='black' filter='url(%23rough)'/%3E%3Cfilter id='rough'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='5'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='10'/%3E%3C/filter%3E%3C/svg%3E");
-      /* Fallback to a simple dashed/rough border style if mask fails */
-      border: 6px dashed rgba(158, 158, 158, 0.6);
+      /* Dashed ring effect */
+      border: 2px dashed rgba(141, 110, 99, 0.4);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
     /* Inner filled circle */
@@ -263,32 +261,23 @@
       left: 12px;
       right: 12px;
       bottom: 12px;
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: rgba(0, 0, 0, 0.03);
       border-radius: 50%;
       z-index: -1;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Embossed Lock Icon */
     .stamp-item.locked .stamp-icon {
       font-size: 40px;
       color: transparent;
-      /* Hide text color */
-      background-color: #b0bec5;
-      /* Metal color */
+      background-color: #bcaaa4;
+      /* Light brown/grey */
       -webkit-background-clip: text;
       background-clip: text;
       text-shadow:
-        2px 2px 4px rgba(255, 255, 255, 0.8),
-        /* Highlight bottom-right */
-        -1px -1px 2px rgba(0, 0, 0, 0.3);
-      /* Shadow top-left */
-      opacity: 0.6;
-      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
-    }
-
-    .stamp-item.locked .stamp-label {
-      opacity: 0.5;
+        1px 1px 2px rgba(255, 255, 255, 0.6),
+        -1px -1px 2px rgba(0, 0, 0, 0.1);
+      opacity: 0.7;
     }
 
     /* Bottom Nav (Reused) */
@@ -298,7 +287,6 @@
       left: 0;
       right: 0;
       background-color: #1b3016;
-      /* Dark Green */
       display: flex;
       justify-content: space-around;
       padding: 12px 0;
@@ -320,6 +308,11 @@
 
     .nav-item.active {
       color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 8px;
+      margin-top: -6px;
+      margin-bottom: -6px;
     }
 
     .nav-item.active .nav-item-label {
@@ -329,37 +322,32 @@
     .nav-item-icon {
       font-size: 20px;
     }
-
-    /* Active tab indicator style */
-    .nav-item.active {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 6px 16px;
-      border-radius: 8px;
-      margin-top: -6px;
-      margin-bottom: -6px;
-    }
   </style>
 </head>
 
 <body>
   <div class="page-container">
-    <!-- Header -->
-    <header class="passport-header">
+    <!-- Header Card Section -->
+    <div class="header-card">
       <h1 class="passport-title">My Wander Passport</h1>
-    </header>
 
-    <!-- Progress Section -->
-    <div class="progress-section">
-      <div class="progress-container">
-        <span class="progress-icon">🥾</span>
-        <div class="progress-track">
-          <div class="progress-fill"></div>
+      <!-- Progress Section -->
+      <div class="progress-section">
+        <div class="progress-container">
+          <div class="progress-icon-badge">
+            <span class="progress-icon">🥾</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-icon-badge">
+            <span class="progress-icon">🧭</span>
+          </div>
         </div>
-        <span class="progress-icon">🧭</span>
-      </div>
-      <div class="progress-labels">
-        <span>Level 1: Hiker</span>
-        <span>Level 2: Explorer</span>
+        <div class="progress-labels">
+          <span>Level 1: Hiker</span>
+          <span>Level 2: Explorer</span>
+        </div>
       </div>
     </div>
 
