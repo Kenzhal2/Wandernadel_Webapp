@@ -1,269 +1,337 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Wander Passport - Sächsische Schweiz Wandernadel</title>
   <link rel="stylesheet" href="shared-styles.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-    /* Additional styles specific to passport view */
-    .passport-content {
-      padding: 24px 20px;
-      max-width: 1200px;
+    /* Passport-specific styles */
+    body {
+      /* Aged Parchment Background matching the mockup */
+      background-color: #e6d5b8;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      min-height: 100vh;
+    }
+
+    .page-container {
+      padding-bottom: 80px;
+      /* Space for bottom nav */
+      max-width: 480px;
       margin: 0 auto;
-      background: 
-        /* Parchment texture */
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 2px,
-          rgba(139, 90, 43, 0.02) 2px,
-          rgba(139, 90, 43, 0.02) 4px
-        );
+      background: none;
+      /* Let body background show through */
+    }
+
+    /* Header */
+    .passport-header {
+      text-align: center;
+      padding: 24px 16px 16px;
+    }
+
+    .passport-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #4e342e;
+      margin: 0;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* Progress Section */
+    .progress-section {
+      padding: 0 24px 32px;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .progress-icon {
+      font-size: 24px;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 24px;
+      background-color: #d7ccc8;
+      border-radius: 12px;
+      position: relative;
+      box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 0 rgba(255, 255, 255, 0.5);
+      border: 2px solid #8d6e63;
+      /* Stitching effect */
+    }
+
+    .progress-track::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      border: 1px dashed rgba(255, 255, 255, 0.4);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 45%;
+      /* Example progress */
+      background: linear-gradient(180deg, #a1887f 0%, #8d6e63 100%);
+      border-radius: 10px;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #3e2723;
+      padding: 0 4px;
+    }
+
+    /* Stamps Grid */
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 0 24px;
+    }
+
+    .stamp-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stamp-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    /* Collected Stamp Style */
+    .stamp-item.collected .stamp-circle {
+      background: #fff;
+      border: 4px solid #d4af37;
+      /* Gold border */
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .stamp-item.collected .stamp-circle::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+      border: 1px solid #d4af37;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
     }
 
     .stamp-image {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
       object-fit: cover;
-      background: linear-gradient(135deg, #f4e8d1 0%, #e8d4b8 100%);
     }
 
     .stamp-label {
-      margin-top: 8px;
-      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
       font-weight: 600;
-      color: var(--color-text-primary);
-      white-space: nowrap;
+      color: #3e2723;
       text-align: center;
-      width: 100%;
-    }
-    
-    @media (min-width: 320px) {
-      .stamp-label {
-        font-size: 11px;
-        margin-top: 6px;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .stamp-label {
-        font-size: 13px;
-        margin-top: 10px;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .stamp-label {
-        font-size: 14px;
-        margin-top: 12px;
-      }
-    }
-    
-    @media (min-width: 1920px) {
-      .stamp-label {
-        font-size: 15px;
-        margin-top: 14px;
-      }
+      background: rgba(255, 255, 255, 0.6);
+      padding: 2px 8px;
+      border-radius: 10px;
     }
 
-    .stamp-wrapper {
+    .stamp-label-overlay {
+      position: absolute;
+      top: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #3e2723;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 3;
+      border: 1px solid #d4af37;
+    }
+
+    /* Locked Stamp Style */
+    .stamp-item.locked .stamp-circle {
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 2px dashed rgba(139, 90, 43, 0.3);
+      /* Dashed outline */
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .stamp-item.locked .stamp-icon {
+      font-size: 32px;
+      opacity: 0.3;
+      color: #5d4037;
+    }
+
+    .stamp-item.locked .stamp-label {
+      opacity: 0.5;
+    }
+
+    /* Bottom Nav (Reused) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #1b3016;
+      /* Dark Green */
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
-    }
-
-    /* Sample stamp illustrations using CSS */
-    .stamp-bastei {
-      background: linear-gradient(180deg, #ffd89b 0%, #19547b 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stamp-bastei::before {
-      content: '🏔️';
-      font-size: 48px;
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .stamp-bastei::after {
-      content: 'Bastei';
-      position: absolute;
-      top: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    .stamp-lilienstein {
-      background: linear-gradient(180deg, #87ceeb 0%, #4682b4 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stamp-lilienstein::before {
-      content: '⛰️';
-      font-size: 48px;
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .stamp-lilienstein::after {
-      content: 'Lilienstein';
-      position: absolute;
-      top: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.6);
       font-size: 12px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      font-family: 'Inter', sans-serif;
+      gap: 4px;
+      transition: color 0.2s ease;
     }
 
-    .stamp-elbe {
-      background: linear-gradient(180deg, #a8e6cf 0%, #3fc1c9 100%);
-      position: relative;
-      overflow: hidden;
+    .nav-item.active {
+      color: #fff;
     }
 
-    .stamp-elbe::before {
-      content: '🚢';
-      font-size: 48px;
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
+    .nav-item.active .nav-item-label {
+      font-weight: 600;
     }
 
-    .stamp-elbe::after {
-      content: 'Elbe';
-      position: absolute;
-      top: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    .nav-item-icon {
+      font-size: 20px;
+    }
+
+    /* Active tab indicator style */
+    .nav-item.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 8px;
+      margin-top: -6px;
+      margin-bottom: -6px;
     }
   </style>
 </head>
-<body class="parchment-bg">
+
+<body>
   <div class="page-container">
-    <!-- Skip to main content link for screen readers -->
-    <a href="#main-content" class="sr-only skip-link">Skip to main content</a>
-    
     <!-- Header -->
-    <header class="page-header" role="banner">
-      <h1>My Wander Passport</h1>
+    <header class="passport-header">
+      <h1 class="passport-title">My Wander Passport</h1>
     </header>
 
-    <!-- Main Content -->
-    <main id="main-content" class="passport-content" role="main">
-      <!-- Progress Bar Section -->
-      <section class="progress-container" aria-label="Collection progress">
-        <div class="progress-level">
-          <div class="progress-level-icon" aria-hidden="true">🥾</div>
-          <div class="progress-level-label">Level 1: Hiker</div>
+    <!-- Progress Section -->
+    <div class="progress-section">
+      <div class="progress-container">
+        <span class="progress-icon">🥾</span>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
         </div>
-        
-        <div class="progress-bar-wrapper" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" aria-label="Progress from Level 1 to Level 2: 65 percent">
-          <div class="progress-bar-fill" style="width: 65%;"></div>
-        </div>
-        
-        <div class="progress-level">
-          <div class="progress-level-icon" aria-hidden="true">🧭</div>
-          <div class="progress-level-label">Level 2: Explorer</div>
-        </div>
-      </section>
+        <span class="progress-icon">🧭</span>
+      </div>
+      <div class="progress-labels">
+        <span>Level 1: Hiker</span>
+        <span>Level 2: Explorer</span>
+      </div>
+    </div>
 
-      <!-- Stamp Grid -->
-      <section class="stamp-grid" aria-label="Stamp collection grid">
-        <!-- Collected Stamps -->
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-collected stamp-bastei" role="button" tabindex="0" aria-label="Bastei stamp - collected">
-            <span class="sr-only">Bastei - Collected</span>
-          </div>
-          <div class="stamp-label">Bastei</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Schrammsteine stamp - not collected">
-            <span class="sr-only">Schrammsteine - Not collected</span>
-          </div>
-          <div class="stamp-label">Schrammsteine</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Königstein stamp - not collected">
-            <span class="sr-only">Königstein - Not collected</span>
-          </div>
-          <div class="stamp-label">Königstein</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-collected stamp-lilienstein" role="button" tabindex="0" aria-label="Lilienstein stamp - collected">
-            <span class="sr-only">Lilienstein - Collected</span>
-          </div>
-          <div class="stamp-label">Lilienstein</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Pfaffenstein stamp - not collected">
-            <span class="sr-only">Pfaffenstein - Not collected</span>
-          </div>
-          <div class="stamp-label">Pfaffenstein</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-collected stamp-collected-silver stamp-elbe" role="button" tabindex="0" aria-label="Elbe stamp - collected">
-            <span class="sr-only">Elbe - Collected</span>
-          </div>
-          <div class="stamp-label">Elbe</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Rathen stamp - not collected">
-            <span class="sr-only">Rathen - Not collected</span>
-          </div>
-          <div class="stamp-label">Rathen</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Hohnstein stamp - not collected">
-            <span class="sr-only">Hohnstein - Not collected</span>
-          </div>
-          <div class="stamp-label">Hohnstein</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Bad Schandau stamp - not collected">
-            <span class="sr-only">Bad Schandau - Not collected</span>
-          </div>
-          <div class="stamp-label">Bad Schandau</div>
-        </div>
-
-        <div class="stamp-wrapper">
-          <div class="stamp stamp-uncollected" role="button" tabindex="0" aria-label="Wehlen stamp - not collected">
-            <span class="sr-only">Wehlen - Not collected</span>
-          </div>
-          <div class="stamp-label">Wehlen</div>
+    <!-- Stamps Grid -->
+    <div class="stamps-grid">
+      <!-- Collected: Bastei -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Bastei</span>
+          <img
+            src="https://images.unsplash.com/photo-1565627382-4179196d9c67?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Bastei" class="stamp-image">
         </div>
       </div>
-    </main>
+
+      <!-- Locked: Schrammsteine -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Locked: Königstein -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Collected: Lilienstein -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Lilienstein</span>
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop" alt="Lilienstein"
+            class="stamp-image">
+        </div>
+      </div>
+
+      <!-- Locked: Pfaffenstein -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Collected: Elbe -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Elbe</span>
+          <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&h=300&fit=crop" alt="Elbe"
+            class="stamp-image">
+        </div>
+      </div>
+    </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
@@ -285,27 +353,6 @@
       </a>
     </nav>
   </div>
-
-  <script>
-    // Simple interactivity for demonstration
-    document.querySelectorAll('.stamp').forEach(stamp => {
-      stamp.addEventListener('click', function() {
-        if (this.classList.contains('stamp-uncollected')) {
-          alert('This stamp is not yet collected. Visit the location to collect it!');
-        } else {
-          alert('Stamp details: ' + this.closest('.stamp-wrapper').querySelector('.stamp-label').textContent);
-        }
-      });
-
-      // Keyboard navigation
-      stamp.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.click();
-        }
-      });
-    });
-  </script>
 </body>
-</html>
 
+</html>
