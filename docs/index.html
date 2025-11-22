@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sächsische Schweiz Wandernadel - Mockups</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #1b3016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            padding: 48px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: #2d5016;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #5d4037;
+            margin-bottom: 48px;
+            opacity: 0.9;
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .mockup-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 32px 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(45, 80, 22, 0.2);
+            border-color: #4caf50;
+            background: #fff;
+        }
+
+        .mockup-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .mockup-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d5016;
+            margin-bottom: 8px;
+        }
+
+        .mockup-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .container {
+                padding: 32px 24px;
+            }
+
+            .mockups-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="badge">🚀 Interactive Mockups</div>
+        <h1>Sächsische Schweiz Wandernadel</h1>
+        <p class="subtitle">Digital Hiking Badge Collection System</p>
+
+        <div class="mockups-grid">
+            <a href="design/mockups/map-view.html" class="mockup-card">
+                <span class="mockup-icon">🗺️</span>
+                <div class="mockup-title">Map View</div>
+                <p class="mockup-description">Interactive map showing hiking locations with topographic styling and
+                    custom pins</p>
+            </a>
+
+            <a href="design/mockups/passport-view.html" class="mockup-card">
+                <span class="mockup-icon">🏔️</span>
+                <div class="mockup-title">Passport View</div>
+                <p class="mockup-description">Digital stamp collection with progress tracking and leather belt design
+                </p>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Click on a mockup to explore the interface designs</p>
+            <p style="margin-top: 8px; opacity: 0.7;">Built for Saxon Switzerland National Park</p>
+        </div>
+    </div>
+</body>
+
+</html>

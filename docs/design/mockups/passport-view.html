@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wander Passport - Sächsische Schweiz Wandernadel</title>
+  <link rel="stylesheet" href="shared-styles.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Passport-specific styles */
+    body {
+      /* Aged Parchment Background matching the mockup */
+      background-color: #e6d5b8;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .page-container {
+      padding-bottom: 80px;
+      /* Space for bottom nav */
+      width: 100%;
+      max-width: 480px;
+      background: none;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* --- Top Section (Unified) --- */
+    .header-section {
+      padding: 32px 24px 0;
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .passport-title {
+      font-family: 'Caveat', cursive;
+      font-size: 42px;
+      color: #5d4037;
+      margin: 0 0 24px 0;
+      font-weight: 700;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* --- Progress Section (Leather Belt) --- */
+    .progress-section {
+      padding: 0 24px 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      height: 56px;
+      margin-bottom: 8px;
+    }
+
+    /* The Leather Belt Track */
+    .progress-track {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      height: 28px;
+      background-color: #d7ccc8;
+      /* Light leather */
+      border-radius: 6px;
+      box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 0 rgba(255, 255, 255, 0.5);
+      z-index: 1;
+      overflow: hidden;
+      border: 1px solid rgba(141, 110, 99, 0.3);
+    }
+
+    /* Stitching on the track */
+    .progress-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.5);
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+
+    /* The Filled Part of the Belt */
+    .progress-fill {
+      height: 100%;
+      width: 45%;
+      /* Example progress */
+      background: linear-gradient(180deg, #a1887f 0%, #8d6e63 100%);
+      /* Darker leather gradient */
+      position: relative;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      border-right: 1px solid rgba(93, 64, 55, 0.5);
+    }
+
+    /* Stitching on the fill */
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.6);
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.6);
+    }
+
+    /* Round Icon Badges */
+    .progress-icon-badge {
+      width: 56px;
+      height: 56px;
+      background-color: #e6d5b8;
+      background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(139, 90, 43, 0.15);
+    }
+
+    .progress-icon {
+      font-size: 28px;
+      color: #5d4037;
+      filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.5));
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #4e342e;
+      padding: 0 4px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* --- Stamps Grid --- */
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 24px;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stamp-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stamp-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    /* Collected Stamp Style */
+    .stamp-item.collected .stamp-circle {
+      background: #fff;
+      border: 4px solid #d4af37;
+      /* Gold border */
+      box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.25),
+        inset 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .stamp-item.collected .stamp-circle::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+      border: 1px solid #d4af37;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .stamp-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stamp-label-overlay {
+      position: absolute;
+      top: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #3e2723;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 3;
+      border: 1px solid #d4af37;
+    }
+
+    /* Locked Stamp Style - Refined */
+    .stamp-item.locked .stamp-circle {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* The rough ring */
+    .stamp-item.locked .stamp-circle::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 50%;
+      /* Dashed ring effect */
+      border: 2px dashed rgba(141, 110, 99, 0.4);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Inner filled circle */
+    .stamp-item.locked .stamp-circle::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      background-color: rgba(0, 0, 0, 0.03);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    /* Embossed Lock Icon */
+    .stamp-item.locked .stamp-icon {
+      font-size: 40px;
+      color: transparent;
+      background-color: #bcaaa4;
+      /* Light brown/grey */
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow:
+        1px 1px 2px rgba(255, 255, 255, 0.6),
+        -1px -1px 2px rgba(0, 0, 0, 0.1);
+      opacity: 0.7;
+    }
+
+    /* Bottom Nav (Reused) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #1b3016;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 8px;
+      margin-top: -6px;
+      margin-bottom: -6px;
+    }
+
+    .nav-item.active .nav-item-label {
+      font-weight: 600;
+    }
+
+    .nav-item-icon {
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <!-- Header Section (Unified) -->
+    <div class="header-section">
+      <h1 class="passport-title">My Wander Passport</h1>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+      <div class="progress-container">
+        <div class="progress-icon-badge">
+          <span class="progress-icon">🥾</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-icon-badge">
+          <span class="progress-icon">🧭</span>
+        </div>
+      </div>
+      <div class="progress-labels">
+        <span>Level 1: Hiker</span>
+        <span>Level 2: Explorer</span>
+      </div>
+    </div>
+
+    <!-- Stamps Grid -->
+    <div class="stamps-grid">
+      <!-- Collected: Bastei -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Bastei</span>
+          <img
+            src="https://images.unsplash.com/photo-1565627382-4179196d9c67?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Bastei" class="stamp-image">
+        </div>
+      </div>
+
+      <!-- Locked: Schrammsteine -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Locked: Königstein -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Collected: Lilienstein -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Lilienstein</span>
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop" alt="Lilienstein"
+            class="stamp-image">
+        </div>
+      </div>
+
+      <!-- Locked: Pfaffenstein -->
+      <div class="stamp-item locked">
+        <div class="stamp-circle">
+          <span class="stamp-icon">🔒</span>
+        </div>
+      </div>
+
+      <!-- Collected: Elbe -->
+      <div class="stamp-item collected">
+        <div class="stamp-circle">
+          <span class="stamp-label-overlay">Elbe</span>
+          <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&h=300&fit=crop" alt="Elbe"
+            class="stamp-image">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <a href="map-view.html" class="nav-item" aria-label="Map view">
+        <span class="nav-item-icon">🗺️</span>
+        <span class="nav-item-label">Map</span>
+      </a>
+      <a href="passport-view.html" class="nav-item active" aria-label="Passport view" aria-current="page">
+        <span class="nav-item-icon">🏔️</span>
+        <span class="nav-item-label">Passport</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Routes">
+        <span class="nav-item-icon">🛤️</span>
+        <span class="nav-item-label">Routes</span>
+      </a>
+      <a href="#" class="nav-item" aria-label="Profile">
+        <span class="nav-item-icon">👤</span>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+  </div>
+</body>
+
+</html>

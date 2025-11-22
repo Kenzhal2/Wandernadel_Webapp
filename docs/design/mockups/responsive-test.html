@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Test - Passport View</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2d5016;
+    }
+    
+    .test-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .breakpoint-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .breakpoint-list li {
+      padding: 8px;
+      margin: 4px 0;
+      background: #f4e8d1;
+      border-left: 4px solid #2d5016;
+      border-radius: 4px;
+    }
+    
+    .breakpoint-list li strong {
+      color: #2d5016;
+    }
+    
+    .iframe-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .iframe-container h2 {
+      margin-top: 0;
+      color: #2d5016;
+    }
+    
+    iframe {
+      width: 100%;
+      border: 2px solid #2d5016;
+      border-radius: 8px;
+      display: block;
+    }
+    
+    .instructions {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      color: #856404;
+    }
+    
+    .instructions ol {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    
+    .instructions li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Passport View - Responsive Test</h1>
+    
+    <div class="test-info">
+      <h2>Test Requirements</h2>
+      <p>Verify the passport mockup is responsive at the following breakpoints:</p>
+      <ul class="breakpoint-list">
+        <li><strong>320px</strong> - Mobile (small phones) - 2 columns, 100px stamps</li>
+        <li><strong>768px</strong> - Tablet - 3 columns, 140px stamps</li>
+        <li><strong>1024px</strong> - Desktop - 4 columns, 160px stamps</li>
+        <li><strong>1920px</strong> - Large Desktop - 5 columns, 180px stamps</li>
+      </ul>
+    </div>
+    
+    <div class="instructions">
+      <h3>How to Test:</h3>
+      <ol>
+        <li>Open browser DevTools (F12)</li>
+        <li>Enable responsive design mode (Ctrl+Shift+M / Cmd+Shift+M)</li>
+        <li>Test each breakpoint by setting the viewport width to: 320px, 768px, 1024px, and 1920px</li>
+        <li>Verify the following:
+          <ul>
+            <li>Stamp grid adjusts column count correctly</li>
+            <li>Stamp sizes scale appropriately</li>
+            <li>Progress bar remains readable</li>
+            <li>Bottom navigation is accessible</li>
+            <li>Text remains readable at all sizes</li>
+            <li>No horizontal scrolling occurs</li>
+          </ul>
+        </li>
+        <li>Alternatively, resize your browser window to test fluid responsiveness</li>
+      </ol>
+    </div>
+    
+    <div class="iframe-container">
+      <h2>Current Viewport: <span id="viewport-size">Resizing...</span></h2>
+      <iframe id="passport-iframe" src="passport-view.html" height="800"></iframe>
+    </div>
+    
+    <div class="test-info">
+      <h2>Expected Behavior at Each Breakpoint</h2>
+      <ul class="breakpoint-list">
+        <li><strong>320px:</strong> 2 columns, compact spacing, smaller fonts, touch-friendly targets (≥44px)</li>
+        <li><strong>768px:</strong> 3 columns, medium spacing, comfortable reading size</li>
+        <li><strong>1024px:</strong> 4 columns, generous spacing, optimal desktop experience</li>
+        <li><strong>1920px:</strong> 5 columns, maximum spacing, centered content with max-width constraint</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // Update viewport size display
+    function updateViewportSize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      document.getElementById('viewport-size').textContent = `${width}px × ${height}px`;
+      
+      // Adjust iframe height based on viewport
+      const iframe = document.getElementById('passport-iframe');
+      if (width < 768) {
+        iframe.height = '600';
+      } else if (width < 1024) {
+        iframe.height = '700';
+      } else {
+        iframe.height = '800';
+      }
+    }
+    
+    updateViewportSize();
+    window.addEventListener('resize', updateViewportSize);
+    
+    // Log breakpoint changes
+    let currentBreakpoint = '';
+    function checkBreakpoint() {
+      const width = window.innerWidth;
+      let breakpoint = '';
+      
+      if (width >= 1920) {
+        breakpoint = '1920px+ (Large Desktop)';
+      } else if (width >= 1024) {
+        breakpoint = '1024px-1919px (Desktop)';
+      } else if (width >= 768) {
+        breakpoint = '768px-1023px (Tablet)';
+      } else {
+        breakpoint = '320px-767px (Mobile)';
+      }
+      
+      if (breakpoint !== currentBreakpoint) {
+        currentBreakpoint = breakpoint;
+        console.log('Breakpoint changed to:', breakpoint);
+      }
+    }
+    
+    checkBreakpoint();
+    window.addEventListener('resize', checkBreakpoint);
+  </script>
+</body>
+</html>
+
